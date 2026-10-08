@@ -29,6 +29,8 @@ const MIME_TYPES = {
     '.ico': 'image/x-icon'
 };
 
+const PUBLIC_DIR = path.join(__dirname, 'public');
+
 function setSecurityHeaders(res) {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
@@ -36,20 +38,24 @@ function setSecurityHeaders(res) {
     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
     res.setHeader('Content-Security-Policy', [
         "default-src 'self'",
-        "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com",
+        "script-src 'self'",
         "style-src 'self' https://fonts.googleapis.com",
         "font-src 'self' https://fonts.gstatic.com data:",
-        "img-src 'self' data: https: https://www.google-analytics.com https://lh3.googleusercontent.com",
+        "img-src 'self' data: https://lh3.googleusercontent.com",
         "frame-src https://www.google.com",
-        "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com"
+        "connect-src 'self'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "frame-ancestors 'self'"
     ].join('; '));
 }
 
 function serveStaticFile(reqPath, res) {
     const safePath = path.normalize(reqPath).replace(/^(\.\.[/\\])+/, '');
-    const filePath = path.join(__dirname, safePath === '/' ? 'index.html' : safePath);
+    const filePath = path.join(PUBLIC_DIR, safePath === '/' ? 'index.html' : safePath);
 
-    if (!filePath.startsWith(__dirname)) {
+    if (!filePath.startsWith(PUBLIC_DIR)) {
         res.writeHead(403);
         res.end('Acceso denegado');
         return;

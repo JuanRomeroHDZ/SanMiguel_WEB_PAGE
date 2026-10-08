@@ -11,12 +11,27 @@ function sanitizeText(str) {
         .trim();
 }
 
+let memoryCache = { payload: null, timestamp: 0 };
+const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutos de cache en memoria
+
 export async function handler(event) {
     if (event.httpMethod !== 'GET' && event.httpMethod !== 'HEAD') {
         return {
             statusCode: 405,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ error: 'Metodo no permitido' })
+        };
+    }
+
+    // Retornar de cache en memoria si aun es valido para reducir peticiones a Google
+    if (memoryCache.payload && (Date.now() - memoryCache.timestamp < CACHE_TTL_MS)) {
+        return {
+            statusCode: 200,
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'public, max-age=1800'
+            },
+            body: JSON.stringify(memoryCache.payload)
         };
     }
 
@@ -70,6 +85,9 @@ export async function handler(event) {
                 user_ratings_total: typeof data.userRatingCount === 'number' ? data.userRatingCount : 0,
                 reviews: safeReviews
             };
+
+            memoryCache.payload = payload;
+            memoryCache.timestamp = Date.now();
 
             return {
                 statusCode: 200,
