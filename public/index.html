@@ -50,8 +50,8 @@
     <!-- Marquesina (Top Bar) con pausa accesible WCAG 2.2.2 -->
     <div class="top-bar" role="region" aria-label="Aviso de horarios de atención">
         <div class="marquee-content" id="marqueeTrack">
-            <span>ABIERTO TODOS LOS DÍAS <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> DE 7:00 AM A 9:00 PM <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> TIENDA SAN MIGUEL</span>
-            <span>ABIERTO TODOS LOS DÍAS <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> DE 7:00 AM A 9:00 PM <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> TIENDA SAN MIGUEL</span>
+            <span>ABIERTO TODOS LOS DÍAS <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> DE 7:00 AM A 9:00 PM <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> TIENDA SAN MIGUEL</span>
+            <span aria-hidden="true">ABIERTO TODOS LOS DÍAS <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> DE 7:00 AM A 9:00 PM <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> TIENDA SAN MIGUEL</span>
         </div>
         <button type="button" class="marquee-toggle" id="marqueeToggleBtn" aria-label="Pausar animación de marquesina" title="Pausar marquesina">
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
@@ -74,7 +74,8 @@
             <li><a href="#ubicacion" class="standard-link" data-section="ubicacion">Ubicación</a></li>
             <li>
                 <div class="nav-contact-wrapper">
-                    <a href="https://wa.me/526642276711" class="nav-contact-btn" target="_blank" rel="noopener noreferrer" aria-label="Enviar mensaje a WhatsApp">
+                    <!-- WCAG 2.5.3: El nombre accesible coincide con el texto visible "Contacto" -->
+                    <a href="https://wa.me/526642276711" class="nav-contact-btn" target="_blank" rel="noopener noreferrer" aria-label="Contacto por WhatsApp">
                         <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.127.554 4.197 1.606 6.012L.182 24l6.108-1.599A11.97 11.97 0 0 0 12.031 24c6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm0 21.996c-1.802 0-3.565-.484-5.11-1.399l-.367-.217-3.801.996.996-3.801-.217-.367C2.495 15.545 2.01 13.782 2.01 12.031 2.01 6.505 6.505 2.01 12.031 2.01c5.526 0 10.021 4.495 10.021 10.021S17.557 21.996 12.031 21.996zm5.501-7.518c-.302-.151-1.785-.882-2.062-.983-.277-.101-.478-.151-.679.151-.201.302-.779.983-.956 1.184-.177.201-.352.227-.654.076-1.505-.753-2.616-1.39-3.569-2.656-.252-.335.253-.309.839-1.48.076-.151.038-.277-.038-.428-.076-.151-.679-1.637-.931-2.241-.246-.593-.495-.512-.679-.522-.177-.01-.378-.01-.579-.01-.201 0-.528.076-.805.378-.277.302-1.057 1.032-1.057 2.516 0 1.484 1.082 2.918 1.233 3.12.151.201 2.127 3.245 5.15 4.545 2.014.863 2.766.704 3.268.591.547-.123 1.785-.73 2.037-1.435.252-.704.252-1.308.177-1.435-.075-.127-.276-.201-.578-.352z"/></svg>
                         Contacto
                     </a>
@@ -117,9 +118,9 @@
             <!-- Barra de Búsqueda -->
             <div class="search-box">
                 <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                <input type="text" id="searchInput" placeholder="Buscar un producto..." aria-label="Buscar producto en el catálogo">
+                <input type="search" id="searchInput" placeholder="Buscar un producto..." aria-label="Buscar producto en el catálogo">
                 
-                <button type="button" id="clearSearch" class="search-clear" aria-label="Limpiar búsqueda">
+                <button type="button" id="clearSearch" class="search-clear" aria-label="Limpiar búsqueda" hidden>
                     <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                 </button>
             </div>
@@ -128,10 +129,10 @@
         <!-- Filtros de Categorías Sticky -->
         <div class="filter-wrapper">
             <div class="filter-container" id="filterContainer">
-                <button class="filter-pill active" data-filter="all">Todos</button>
-                <button class="filter-pill" data-filter="alimentos">Alimentos & Bebidas</button>
-                <button class="filter-pill" data-filter="hogar">Hogar & Cuidado</button>
-                <button class="filter-pill" data-filter="extras">Servicios & Extras</button>
+                <button type="button" class="filter-pill active" data-filter="all" aria-pressed="true">Todos</button>
+                <button type="button" class="filter-pill" data-filter="alimentos" aria-pressed="false">Alimentos & Bebidas</button>
+                <button type="button" class="filter-pill" data-filter="hogar" aria-pressed="false">Hogar & Cuidado</button>
+                <button type="button" class="filter-pill" data-filter="extras" aria-pressed="false">Servicios & Extras</button>
             </div>
         </div>
 
@@ -240,15 +241,15 @@
                 </div>
             </div>
             
-            <!-- Estructura del Carrusel Rediseñado: Sin botones gigantes -->
+            <!-- Estructura del Carrusel Accesible (WCAG 2.2.2 & 4.1.2) -->
             <div class="reviews-carousel-wrapper" id="reviewsCarouselWrapper">
-                <div class="reviews-carousel-viewport" id="reviewsCarouselViewport" aria-roledescription="carousel">
+                <div class="reviews-carousel-viewport" id="reviewsCarouselViewport" aria-roledescription="carousel" role="region" aria-label="Carrusel de testimonios">
                     <div class="reviews-carousel-track" id="reviewsGrid">
-                        <!-- Las reseñas o estado auténtico se inyectan mediante nodos DOM seguros -->
+                        <!-- Las reseñas se inyectan mediante nodos DOM seguros -->
                     </div>
                 </div>
 
-                <!-- Controles Compactos y Minimalistas -->
+                <!-- Controles Compactos y Accesibles -->
                 <div class="reviews-controls" id="reviewsControls">
                     <button type="button" class="btn-ctrl-compact" id="carouselPrevBtn" aria-label="Opinión anterior">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
@@ -257,6 +258,10 @@
                     <span class="carousel-counter" id="carouselCounter" aria-live="polite"></span>
                     <button type="button" class="btn-ctrl-compact" id="carouselNextBtn" aria-label="Siguiente opinión">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                    </button>
+                    <!-- Botón de Pausa/Reanudación WCAG 2.2.2 -->
+                    <button type="button" class="btn-ctrl-compact" id="carouselPlayPauseBtn" aria-label="Pausar carrusel automático" title="Pausar carrusel automático">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                     </button>
                 </div>
             </div>
@@ -352,7 +357,7 @@
     </footer>
 
     <!-- Botón Flotante de WhatsApp (FAB) -->
-    <a href="https://wa.me/526642276711" id="whatsappFab" class="fab" target="_blank" rel="noopener noreferrer" aria-label="Mándanos un mensaje por WhatsApp">
+    <a href="https://wa.me/526642276711" id="whatsappFab" class="fab" target="_blank" rel="noopener noreferrer" aria-label="Contacto por WhatsApp">
         <div class="fab-icon-wrapper">
             <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.127.554 4.197 1.606 6.012L.182 24l6.108-1.599A11.97 11.97 0 0 0 12.031 24c6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm0 21.996c-1.802 0-3.565-.484-5.11-1.399l-.367-.217-3.801.996.996-3.801-.217-.367C2.495 15.545 2.01 13.782 2.01 12.031 2.01 6.505 6.505 2.01 12.031 2.01c5.526 0 10.021 4.495 10.021 10.021S17.557 21.996 12.031 21.996zm5.501-7.518c-.302-.151-1.785-.882-2.062-.983-.277-.101-.478-.151-.679.151-.201.302-.779.983-.956 1.184-.177.201-.352.227-.654.076-1.505-.753-2.616-1.39-3.569-2.656-.252-.335.253-.309.839-1.48.076-.151.038-.277-.038-.428-.076-.151-.679-1.637-.931-2.241-.246-.593-.495-.512-.679-.522-.177-.01-.378-.01-.579-.01-.201 0-.528.076-.805.378-.277.302-1.057 1.032-1.057 2.516 0 1.484 1.082 2.918 1.233 3.12.151.201 2.127 3.245 5.15 4.545 2.014.863 2.766.704 3.268.591.547-.123 1.785-.73 2.037-1.435.252-.704.252-1.308.177-1.435-.075-.127-.276-.201-.578-.352z"/>

@@ -1,6 +1,7 @@
 /**
  * reviews.js - Modulo atomico para renderizado y navegacion accesible de opiniones reales
- * Construye elementos usando APIs nativas del DOM sin innerHTML para maxima seguridad
+ * Construye elementos usando APIs nativas del DOM sin innerHTML para maxima seguridad (OWASP)
+ * Cumple con WCAG 2.2.2 (control de pausa/reanudacion, pausa en hover y foco) y WCAG 4.1.2 (roles ARIA tablist/tab)
  */
 
 function createStarSvg(filled = true) {
@@ -22,9 +23,11 @@ function createStarSvg(filled = true) {
 function createReviewCard(review, index, total) {
     const card = document.createElement('article');
     card.className = 'review-card';
-    card.setAttribute('role', 'group');
+    card.setAttribute('role', 'tabpanel');
+    card.setAttribute('id', `review-slide-${index}`);
     card.setAttribute('aria-roledescription', 'slide');
     card.setAttribute('aria-label', `Opinión ${index + 1} de ${total}`);
+    card.setAttribute('tabindex', '0');
 
     const inner = document.createElement('div');
     inner.className = 'review-card-inner';
@@ -128,8 +131,10 @@ function setupCarousel(reviewsCount) {
     const dotsContainer = document.getElementById('carouselDots');
     const prevBtn = document.getElementById('carouselPrevBtn');
     const nextBtn = document.getElementById('carouselNextBtn');
+    const playPauseBtn = document.getElementById('carouselPlayPauseBtn');
     const controls = document.getElementById('reviewsControls');
     const indicator = document.getElementById('carouselCounter');
+    const wrapper = document.getElementById('reviewsCarouselWrapper');
 
     if (!track) return;
 
@@ -141,18 +146,56 @@ function setupCarousel(reviewsCount) {
     if (controls) controls.style.display = 'flex';
 
     if (dotsContainer) {
+        dotsContainer.setAttribute('role', 'tablist');
+        dotsContainer.setAttribute('aria-label', 'Navegación de reseñas');
         while (dotsContainer.firstChild) dotsContainer.removeChild(dotsContainer.firstChild);
+
         for (let i = 0; i < reviewsCount; i++) {
             const dot = document.createElement('button');
             dot.type = 'button';
             dot.className = i === 0 ? 'carousel-dot active' : 'carousel-dot';
+            dot.setAttribute('role', 'tab');
+            dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+            dot.setAttribute('aria-controls', `review-slide-${i}`);
+            dot.setAttribute('id', `carousel-dot-${i}`);
             dot.setAttribute('aria-label', `Ir a reseña ${i + 1} de ${reviewsCount}`);
-            dot.addEventListener('click', () => goToSlide(i));
+            dot.addEventListener('click', () => {
+                goToSlide(i);
+            });
             dotsContainer.appendChild(dot);
         }
     }
 
     let currentIndex = 0;
+    let isUserPaused = false;
+    let isHoverPaused = false;
+    let autoPlayTimer = null;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function updatePlayPauseIcon(paused) {
+        if (!playPauseBtn) return;
+        while (playPauseBtn.firstChild) playPauseBtn.removeChild(playPauseBtn.firstChild);
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('aria-hidden', 'true');
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        if (paused) {
+            // Icono de reproducir (Play)
+            path.setAttribute('d', 'M8 5v14l11-7z');
+            playPauseBtn.setAttribute('aria-label', 'Reanudar carrusel automático');
+            playPauseBtn.setAttribute('title', 'Reanudar carrusel automático');
+        } else {
+            // Icono de pausa
+            path.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
+            playPauseBtn.setAttribute('aria-label', 'Pausar carrusel automático');
+            playPauseBtn.setAttribute('title', 'Pausar carrusel automático');
+        }
+        svg.appendChild(path);
+        playPauseBtn.appendChild(svg);
+    }
 
     function updateView() {
         track.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -164,7 +207,9 @@ function setupCarousel(reviewsCount) {
         if (dotsContainer) {
             const dots = dotsContainer.querySelectorAll('.carousel-dot');
             dots.forEach((dot, idx) => {
-                dot.classList.toggle('active', idx === currentIndex);
+                const isSelected = (idx === currentIndex);
+                dot.classList.toggle('active', isSelected);
+                dot.setAttribute('aria-selected', String(isSelected));
             });
         }
     }
@@ -182,10 +227,67 @@ function setupCarousel(reviewsCount) {
         goToSlide(currentIndex - 1);
     }
 
-    if (prevBtn) prevBtn.onclick = prev;
-    if (nextBtn) nextBtn.onclick = next;
+    function startTimer() {
+        if (prefersReducedMotion || isUserPaused || isHoverPaused) return;
+        stopTimer();
+        autoPlayTimer = setInterval(next, 6000);
+    }
 
-    // Soporte táctil en móviles
+    function stopTimer() {
+        if (autoPlayTimer) {
+            clearInterval(autoPlayTimer);
+            autoPlayTimer = null;
+        }
+    }
+
+    if (prevBtn) {
+        prevBtn.onclick = () => {
+            prev();
+            startTimer();
+        };
+    }
+
+    if (nextBtn) {
+        nextBtn.onclick = () => {
+            next();
+            startTimer();
+        };
+    }
+
+    if (playPauseBtn) {
+        updatePlayPauseIcon(prefersReducedMotion || isUserPaused);
+        playPauseBtn.onclick = () => {
+            isUserPaused = !isUserPaused;
+            updatePlayPauseIcon(isUserPaused);
+            if (isUserPaused) {
+                stopTimer();
+            } else {
+                startTimer();
+            }
+        };
+    }
+
+    // Pausar en hover o cuando recibe foco (WCAG 2.2.2)
+    if (wrapper) {
+        wrapper.addEventListener('mouseenter', () => {
+            isHoverPaused = true;
+            stopTimer();
+        });
+        wrapper.addEventListener('mouseleave', () => {
+            isHoverPaused = false;
+            startTimer();
+        });
+        wrapper.addEventListener('focusin', () => {
+            isHoverPaused = true;
+            stopTimer();
+        });
+        wrapper.addEventListener('focusout', () => {
+            isHoverPaused = false;
+            startTimer();
+        });
+    }
+
+    // Gestos tactiles
     let startX = 0;
     track.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
@@ -197,10 +299,12 @@ function setupCarousel(reviewsCount) {
         if (Math.abs(diff) > 40) {
             if (diff > 0) next();
             else prev();
+            startTimer();
         }
     }, { passive: true });
 
     updateView();
+    startTimer();
 }
 
 export async function initReviews() {

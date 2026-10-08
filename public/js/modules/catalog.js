@@ -1,6 +1,6 @@
 /**
  * catalog.js - Modulo atomico para gestion del catalogo bento grid
- * Permite busqueda en tiempo real y filtrado por categorias sin dependencias externas
+ * Permite busqueda en tiempo real y filtrado por categorias accesible (aria-pressed, hidden)
  */
 
 export function initCatalog() {
@@ -64,18 +64,24 @@ export function initCatalog() {
         }
     };
 
+    const updateFilterPills = (activeFilter) => {
+        if (!filterContainer) return;
+        filterContainer.querySelectorAll('.filter-pill').forEach(b => {
+            const isActive = (b.getAttribute('data-filter') === activeFilter);
+            b.classList.toggle('active', isActive);
+            b.setAttribute('aria-pressed', String(isActive));
+        });
+    };
+
     const resetAll = () => {
         if (searchInput) searchInput.value = '';
+        if (clearSearchBtn) clearSearchBtn.hidden = true;
         currentSearch = '';
         currentFilter = 'all';
 
-        if (filterContainer) {
-            filterContainer.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-            const defaultPill = filterContainer.querySelector('[data-filter="all"]');
-            if (defaultPill) defaultPill.classList.add('active');
-        }
-
+        updateFilterPills('all');
         render();
+        if (searchInput) searchInput.focus();
     };
 
     if (filterContainer) {
@@ -85,13 +91,14 @@ export function initCatalog() {
 
             if (searchInput) {
                 searchInput.value = '';
-                currentSearch = '';
             }
+            if (clearSearchBtn) {
+                clearSearchBtn.hidden = true;
+            }
+            currentSearch = '';
 
-            filterContainer.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
             currentFilter = btn.getAttribute('data-filter') || 'all';
-
+            updateFilterPills(currentFilter);
             render();
         });
     }
@@ -100,10 +107,15 @@ export function initCatalog() {
         searchInput.addEventListener('input', (e) => {
             const raw = String(e.target.value || '').slice(0, 50);
             currentSearch = raw.toLowerCase().trim();
+            if (clearSearchBtn) {
+                clearSearchBtn.hidden = (raw.length === 0);
+            }
             render();
         });
     }
 
     if (clearSearchBtn) clearSearchBtn.addEventListener('click', resetAll);
     if (resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetAll);
+
+    updateFilterPills('all');
 }
