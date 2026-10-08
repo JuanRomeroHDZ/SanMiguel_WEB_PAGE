@@ -1,106 +1,177 @@
 /**
- * main.js - Logica de interfaz, carrusel automatico y consumo seguro de API para Tienda San Miguel
+ * main.js - Logica de interfaz, horario por zona local y carrusel de reseñas para Tienda San Miguel
  */
 
-// 5 Reseñas auténticas y optimizadas para el carrusel
-const FALLBACK_REVIEWS = [
-    {
-        author_name: 'Carlos Mendoza',
-        rating: 5,
-        relative_time_description: 'Hace 2 semanas',
-        text: 'Excelente tiendita de la esquina. Siempre tienen bolillo caliente por las mañanas y los lácteos súper frescos. La atención es de diez.',
-        profile_photo_url: ''
-    },
-    {
-        author_name: 'María Luisa R.',
-        rating: 5,
-        relative_time_description: 'Hace 1 mes',
-        text: 'Tienen de todo un poco, muy bien surtida. Me salva siempre con las recargas telefónicas y el pago de servicios. Abren temprano y atienden muy amable.',
-        profile_photo_url: ''
-    },
-    {
-        author_name: 'Héctor Ramírez',
-        rating: 5,
-        relative_time_description: 'Hace 2 meses',
-        text: 'Llevo años comprando aquí. Buenos precios, aceptan tarjeta y Mercado Pago lo cual es súper cómodo cuando no traes efectivo.',
-        profile_photo_url: ''
-    },
-    {
-        author_name: 'Ana Patricia Gómez',
-        rating: 5,
-        relative_time_description: 'Hace 3 meses',
-        text: 'Muy limpia la tienda y los refrigeradores bien surtidos con refrescos fríos. Las tortillas siempre calientitas para la comida.',
-        profile_photo_url: ''
-    },
-    {
-        author_name: 'Jorge Luis Estrada',
-        rating: 5,
-        relative_time_description: 'Hace 4 meses',
-        text: 'La mejor tienda del rumbo para emergencias de despensa y farmacia básica. Te atienden rápido y con una sonrisa.',
-        profile_photo_url: ''
+// 1. CARGA DIFERIDA Y SEGURA DE GOOGLE ANALYTICS
+function initAnalytics() {
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        window.dataLayer.push(arguments);
     }
-];
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-QFVF820EBY');
 
-// Sanitizacion de texto del lado cliente
-function escapeHtml(str) {
-    if (!str) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-QFVF820EBY';
+    document.head.appendChild(script);
 }
 
-function createStarSvg(filled = true) {
-    return `
-        <svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;fill: ${filled ? '#FFB800' : '#D1D5DB'};">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
-    `;
+// 2. HORARIO DE APERTURA SEGÚN LA ZONA HORARIA LOCAL DE TIJUANA (7:00 AM - 9:00 PM)
+function initStoreStatus() {
+    const statusBadge = document.getElementById('statusBadge');
+    const statusText = document.getElementById('statusText');
+
+    if (!statusBadge || !statusText) return;
+
+    const updateOpenStatus = () => {
+        // Se evalua la hora en la zona horaria del negocio independiente del huso del cliente
+        const formatter = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'America/Tijuana',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false
+        });
+        const parts = formatter.formatToParts(new Date());
+        const hour = parseInt(parts.find(p => p.type === 'hour')?.value, 10);
+        const minute = parseInt(parts.find(p => p.type === 'minute')?.value, 10);
+        const minsInTijuana = (hour * 60) + minute;
+
+        // Abierto de 7:00 AM (420 mins) a 9:00 PM (1260 mins)
+        const open = minsInTijuana >= 420 && minsInTijuana < 1260;
+
+        statusBadge.classList.toggle('closed', !open);
+        statusText.textContent = open ? 'Abierto hoy' : 'Cerrado ahora · Abrimos 7:00 AM';
+    };
+
+    updateOpenStatus();
+    setInterval(updateOpenStatus, 60000);
 }
 
-function renderStars(rating) {
-    let starsHtml = '';
-    const safeRating = Math.min(Math.max(Number(rating) || 5, 1), 5);
+// 3. GENERADOR DE NODOS DOM SEGUROS (SIN innerHTML)
+function createStarSvgNode(filled = true) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.style.width = '18px';
+    svg.style.height = '18px';
+    svg.style.fill = filled ? '#FFB800' : '#D1D5DB';
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z');
+    svg.appendChild(path);
+    return svg;
+}
+
+function createReviewCardNode(review) {
+    const card = document.createElement('article');
+    card.className = 'review-card';
+
+    const innerDiv = document.createElement('div');
+
+    const header = document.createElement('header');
+    header.className = 'review-card-header';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'review-avatar';
+    avatar.setAttribute('aria-hidden', 'true');
+
+    const photoUrl = typeof review.profile_photo_url === 'string' && review.profile_photo_url.startsWith('https://')
+        ? review.profile_photo_url
+        : null;
+
+    if (photoUrl) {
+        const img = document.createElement('img');
+        img.src = photoUrl;
+        img.alt = review.author_name || 'Cliente';
+        img.loading = 'lazy';
+        img.referrerPolicy = 'no-referrer';
+        avatar.appendChild(img);
+    } else {
+        const initial = document.createElement('span');
+        initial.textContent = (review.author_name || 'U').charAt(0).toUpperCase();
+        avatar.appendChild(initial);
+    }
+
+    const meta = document.createElement('div');
+    meta.className = 'review-author-meta';
+
+    const authorName = document.createElement('h4');
+    authorName.textContent = review.author_name || 'Cliente de Google';
+
+    const reviewTime = document.createElement('span');
+    reviewTime.className = 'review-time';
+    reviewTime.textContent = review.relative_time_description || 'Opinión de Google Maps';
+
+    meta.appendChild(authorName);
+    meta.appendChild(reviewTime);
+
+    header.appendChild(avatar);
+    header.appendChild(meta);
+
+    const starsDiv = document.createElement('div');
+    starsDiv.className = 'review-card-stars';
+    const ratingNum = Math.min(Math.max(Number(review.rating) || 5, 1), 5);
+    starsDiv.setAttribute('aria-label', `Calificación: ${ratingNum} de 5 estrellas`);
     for (let i = 1; i <= 5; i++) {
-        starsHtml += createStarSvg(i <= safeRating);
+        starsDiv.appendChild(createStarSvgNode(i <= ratingNum));
     }
-    return starsHtml;
+
+    const reviewText = document.createElement('p');
+    reviewText.className = 'review-text';
+    reviewText.textContent = review.text ? `"${review.text}"` : 'Sin comentarios adicionales.';
+
+    innerDiv.appendChild(header);
+    innerDiv.appendChild(starsDiv);
+    innerDiv.appendChild(reviewText);
+
+    card.appendChild(innerDiv);
+    return card;
 }
 
-function renderReviewCard(review) {
-    const safeName = escapeHtml(review.author_name || 'Cliente');
-    const safeTime = escapeHtml(review.relative_time_description || 'Reseña de Google');
-    const safeText = escapeHtml(review.text || '');
-    const initial = safeName.charAt(0).toUpperCase() || 'U';
+function renderEmptyReviewsState() {
+    const track = document.getElementById('reviewsGrid');
+    const dotsContainer = document.getElementById('carouselDots');
+    const ratingSummary = document.getElementById('googleRatingSummary');
+    const prevBtn = document.getElementById('carouselPrevBtn');
+    const nextBtn = document.getElementById('carouselNextBtn');
 
-    const safePhoto = (typeof review.profile_photo_url === 'string' && review.profile_photo_url.startsWith('https://'))
-        ? `<img src="${escapeHtml(review.profile_photo_url)}" alt="${safeName}" loading="lazy" referrerpolicy="no-referrer">`
-        : `<span>${initial}</span>`;
+    if (ratingSummary) ratingSummary.style.display = 'none';
+    if (prevBtn) prevBtn.style.display = 'none';
+    if (nextBtn) nextBtn.style.display = 'none';
 
-    return `
-        <article class="review-card">
-            <div>
-                <header class="review-card-header">
-                    <div class="review-avatar" aria-hidden="true">
-                        ${safePhoto}
-                    </div>
-                    <div class="review-author-meta">
-                        <h4>${safeName}</h4>
-                        <span class="review-time">${safeTime}</span>
-                    </div>
-                </header>
-                <div class="review-card-stars" aria-label="Calificación: ${review.rating} de 5 estrellas">
-                    ${renderStars(review.rating)}
-                </div>
-                <p class="review-text">"${safeText}"</p>
-            </div>
-        </article>
-    `;
+    if (dotsContainer) {
+        while (dotsContainer.firstChild) dotsContainer.removeChild(dotsContainer.firstChild);
+    }
+
+    if (!track) return;
+    while (track.firstChild) track.removeChild(track.firstChild);
+
+    const emptyBox = document.createElement('div');
+    emptyBox.className = 'reviews-empty-state';
+
+    const title = document.createElement('h3');
+    title.textContent = 'Sé el primero en compartir tu experiencia';
+
+    const description = document.createElement('p');
+    description.textContent = 'Las opiniones provienen directamente de Google Maps. Déjanos tu valoración para ayudarnos a seguir mejorando cada día.';
+
+    const cta = document.createElement('a');
+    cta.href = 'https://www.google.com/maps/place/?q=place_id:ChIJL1WmDQA_2YARRj0C3nEAkW4';
+    cta.target = '_blank';
+    cta.rel = 'noopener noreferrer';
+    cta.className = 'btn-outline';
+    cta.textContent = 'Escribir una reseña en Google Maps';
+
+    emptyBox.appendChild(title);
+    emptyBox.appendChild(description);
+    emptyBox.appendChild(cta);
+
+    track.appendChild(emptyBox);
 }
 
-// Controlador del Carrusel Automático de Reseñas
+// 4. CARRUSEL AUTOMÁTICO
 let carouselTimer = null;
 let currentSlideIndex = 0;
 
@@ -111,17 +182,23 @@ function setupCarousel(reviewsCount) {
     const nextBtn = document.getElementById('carouselNextBtn');
     const wrapper = document.getElementById('reviewsCarouselWrapper');
 
-    if (!track || !dotsContainer || reviewsCount <= 1) {
-        if (dotsContainer) dotsContainer.innerHTML = '';
+    if (!track || !dotsContainer) return;
+
+    while (dotsContainer.firstChild) dotsContainer.removeChild(dotsContainer.firstChild);
+
+    if (reviewsCount <= 1) {
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
         return;
+    } else {
+        if (prevBtn) prevBtn.style.display = 'flex';
+        if (nextBtn) nextBtn.style.display = 'flex';
     }
 
-    // Generar dots
-    dotsContainer.innerHTML = '';
     for (let i = 0; i < reviewsCount; i++) {
         const dot = document.createElement('button');
         dot.type = 'button';
-        dot.className = `carousel-dot ${i === 0 ? 'active' : ''}`;
+        dot.className = i === 0 ? 'carousel-dot active' : 'carousel-dot';
         dot.setAttribute('aria-label', `Ir a la reseña ${i + 1}`);
         dot.addEventListener('click', () => {
             goToSlide(i);
@@ -151,14 +228,9 @@ function setupCarousel(reviewsCount) {
         goToSlide(currentSlideIndex - 1);
     }
 
-    if (prevBtn) {
-        prevBtn.onclick = () => { prevSlide(); resetAutoPlay(); };
-    }
-    if (nextBtn) {
-        nextBtn.onclick = () => { nextSlide(); resetAutoPlay(); };
-    }
+    if (prevBtn) prevBtn.onclick = () => { prevSlide(); resetAutoPlay(); };
+    if (nextBtn) nextBtn.onclick = () => { nextSlide(); resetAutoPlay(); };
 
-    // Soporte táctil (Swipe)
     let touchStartX = 0;
     track.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
@@ -174,7 +246,6 @@ function setupCarousel(reviewsCount) {
         }
     }, { passive: true });
 
-    // Autoplay cada 5 segundos (si el usuario no prefiere movimiento reducido)
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function startAutoPlay() {
@@ -206,61 +277,49 @@ function setupCarousel(reviewsCount) {
     startAutoPlay();
 }
 
-// Carga segura de opiniones (maximo 5)
+// 5. CONSUMO DE API DE OPINIONES REALES
 async function initReviews() {
-    const reviewsContainer = document.getElementById('reviewsGrid');
-    if (!reviewsContainer) return;
+    const track = document.getElementById('reviewsGrid');
+    const ratingSummary = document.getElementById('googleRatingSummary');
+    const scoreVal = document.getElementById('ratingScoreVal');
 
-    let reviewsToShow = FALLBACK_REVIEWS.slice(0, 5);
+    if (!track) return;
 
     try {
         const response = await fetch('/api/reviews', {
             method: 'GET',
             headers: { 'Accept': 'application/json' },
-            signal: AbortSignal.timeout(3500)
+            signal: AbortSignal.timeout(4000)
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            if (data && Array.isArray(data.reviews) && data.reviews.length > 0) {
-                // Solo permitimos 5 reseñas, las más relevantes
-                reviewsToShow = data.reviews.slice(0, 5);
+        if (!response.ok) {
+            renderEmptyReviewsState();
+            return;
+        }
 
-                if (data.rating) {
-                    const scoreElem = document.getElementById('ratingScoreVal');
-                    if (scoreElem) scoreElem.textContent = Number(data.rating).toFixed(1);
-                }
+        const data = await response.json();
+        if (data && Array.isArray(data.reviews) && data.reviews.length > 0) {
+            while (track.firstChild) track.removeChild(track.firstChild);
+
+            data.reviews.forEach(review => {
+                track.appendChild(createReviewCardNode(review));
+            });
+
+            if (data.rating && typeof data.rating === 'number' && scoreVal && ratingSummary) {
+                scoreVal.textContent = data.rating.toFixed(1);
+                ratingSummary.style.display = 'flex';
             }
+
+            setupCarousel(data.reviews.length);
+        } else {
+            renderEmptyReviewsState();
         }
     } catch (_) {
-        // En caso de modo estatico o sin conexion al servidor, usa las 5 opiniones de respaldo
+        renderEmptyReviewsState();
     }
-
-    reviewsContainer.innerHTML = reviewsToShow.map(renderReviewCard).join('');
-    setupCarousel(reviewsToShow.length);
 }
 
-// Estado de apertura en vivo (7:00 AM - 9:00 PM)
-function initStoreStatus() {
-    const statusBadge = document.getElementById('statusBadge');
-    const statusText = document.getElementById('statusText');
-
-    if (!statusBadge || !statusText) return;
-
-    const updateOpenStatus = () => {
-        const now = new Date();
-        const mins = now.getHours() * 60 + now.getMinutes();
-        const open = mins >= 7 * 60 && mins < 21 * 60;
-
-        statusBadge.classList.toggle('closed', !open);
-        statusText.textContent = open ? 'Abierto hoy' : 'Cerrado ahora · Abrimos 7:00 AM';
-    };
-
-    updateOpenStatus();
-    setInterval(updateOpenStatus, 60000);
-}
-
-// Catálogo: Búsqueda con validación y filtrado Bento Grid
+// 6. CATÁLOGO: BÚSQUEDA Y FILTRADO
 function initCatalog() {
     const filterContainer = document.getElementById('filterContainer');
     const searchInput = document.getElementById('searchInput');
@@ -363,13 +422,13 @@ function initCatalog() {
     if (resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetEverything);
 }
 
-// Coordinador principal
+// 7. INICIALIZADOR PRINCIPAL
 document.addEventListener('DOMContentLoaded', () => {
+    initAnalytics();
     initStoreStatus();
     initCatalog();
     initReviews();
 
-    // Detección de fondo de pantalla para alternar botón de WhatsApp
     const navContactBtn = document.querySelector('.nav-contact-btn');
     let ticking = false;
 
@@ -420,7 +479,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     handleScroll();
 
-    // Animación de secciones
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -432,11 +490,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const locationSec = document.querySelector('.location-section');
     if (locationSec) revealObserver.observe(locationSec);
 
-    // Año actual en pie de página
     const footerYear = document.getElementById('footerYear');
     if (footerYear) footerYear.textContent = new Date().getFullYear();
 
-    // Scrollspy en navegación
     const navSectionLinks = document.querySelectorAll('.nav-links a[data-section]');
     const spyObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -451,7 +507,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sec) spyObserver.observe(sec);
     });
 
-    // Efecto ripple en botón flotante
     const fab = document.getElementById('whatsappFab');
     if (fab) {
         fab.addEventListener('touchstart', () => {}, { passive: true });

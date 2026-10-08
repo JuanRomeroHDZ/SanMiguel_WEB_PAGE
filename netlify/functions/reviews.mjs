@@ -1,7 +1,4 @@
-// netlify/functions/reviews.mjs - Endpoint Serverless protegido para Netlify
-
-let cache = { data: null, expiry: 0 };
-const CACHE_TTL_MS = (parseInt(process.env.CACHE_TTL_MINUTES, 10) || 60) * 60 * 1000;
+// netlify/functions/reviews.mjs - Endpoint Serverless unico para consultar Google Places API (New)
 
 function sanitizeText(str) {
     if (typeof str !== 'string') return '';
@@ -14,24 +11,12 @@ function sanitizeText(str) {
         .trim();
 }
 
-export async function handler(event, context) {
+export async function handler(event) {
     if (event.httpMethod !== 'GET' && event.httpMethod !== 'HEAD') {
         return {
             statusCode: 405,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ error: 'Metodo no permitido' })
-        };
-    }
-
-    const now = Date.now();
-    if (cache.data && now < cache.expiry) {
-        return {
-            statusCode: 200,
-            headers: {
-                'Content-Type': 'application/json',
-                'Cache-Control': 'public, max-age=3600'
-            },
-            body: JSON.stringify(cache.data)
         };
     }
 
@@ -47,8 +32,7 @@ export async function handler(event, context) {
     }
 
     try {
-        // Peticion a Places API (New)
-        const newApiUrl = `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}?languageCode=es`;
+        const apiUrl = `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}?languageCode=es`;
         const headers = {
             'Content-Type': 'application/json',
             'X-Goog-Api-Key': apiKey,
@@ -61,7 +45,7 @@ export async function handler(event, context) {
             headers['Referer'] = event.headers.referer || event.headers.Referer;
         }
 
-        const res = await fetch(newApiUrl, {
+        const res = await fetch(apiUrl, {
             headers,
             signal: AbortSignal.timeout(5000)
         });
@@ -70,44 +54,43 @@ export async function handler(event, context) {
             const data = await res.json();
             const rawReviews = data.reviews || [];
 
-            // Filtrar las 5 mas relevantes / de mejor calificacion
-            const safeReviews = rawReviews
-                .sort((a, b) => (b.rating || 0) - (a.rating || 0))
-                .slice(0, 5)
-                .map(r => ({
-                    author_name: sanitizeText(r.authorAttribution?.displayName || 'Cliente'),
-                    rating: Math.min(Math.max(Number(r.rating) || 5, 1), 5),
-                    relative_time_description: sanitizeText(r.relativePublishTimeDescription || ''),
-                    text: sanitizeText(r.text?.text || r.originalText?.text || ''),
-                    profile_photo_url: typeof r.authorAttribution?.photoUri === 'string' && r.authorAttribution.photoUri.startsWith('https://')
-                        ? r.authorAttribution.photoUri
-                        : ''
-                }));
+            // Conservar el orden natural provisto por Google sin reordenar, limitando a 5
+            const safeReviews = rawReviews.slice(0, 5).map(r => ({
+                author_name: sanitizeText(r.authorAttribution?.displayName || 'Cliente'),
+                rating: Number(r.rating) || 5,
+                relative_time_description: sanitizeText(r.relativePublishTimeDescription || ''),
+                text: sanitizeText(r.text?.text || r.originalText?.text || ''),
+                profile_photo_url: typeof r.authorAttribution?.photoUri === 'string' && r.authorAttribution.photoUri.startsWith('https://')
+                    ? r.authorAttribution.photoUri
+                    : ''
+            }));
 
             const payload = {
-                rating: Number(data.rating) || 5.0,
-                user_ratings_total: Number(data.userRatingCount) || safeReviews.length,
+                rating: typeof data.rating === 'number' ? data.rating : null,
+                user_ratings_total: typeof data.userRatingCount === 'number' ? data.userRatingCount : 0,
                 reviews: safeReviews
             };
-
-            cache = { data: payload, expiry: now + CACHE_TTL_MS };
 
             return {
                 statusCode: 200,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Cache-Control': 'public, max-age=3600'
+                    'Cache-Control': 'public, max-age=1800'
                 },
                 body: JSON.stringify(payload)
             };
         }
 
-        throw new Error(`Google API status: ${res.status}`);
-    } catch (err) {
+        return {
+            statusCode: res.status,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ error: 'No se pudo obtener información de Google Places', status: res.status })
+        };
+    } catch (_) {
         return {
             statusCode: 500,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ error: 'Error al recuperar opiniones' })
+            body: JSON.stringify({ error: 'Error interno al consultar opiniones' })
         };
     }
 }
