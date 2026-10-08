@@ -53,11 +53,31 @@ export function initNavigation() {
         });
     }
 
-    // 3. CAMBIO DE BOTON DE WHATSAPP AL LLEGAR AL FINAL (BOTTOM SWAP)
+    // 3. CAMBIO DE BOTON DE WHATSAPP AL LLEGAR AL FINAL (BOTTOM SWAP) Y OCULTAR/MOSTRAR HEADER
     const navContactBtn = document.querySelector('.nav-contact-btn');
     let ticking = false;
+    let lastScrollY = window.scrollY;
 
     const handleScroll = () => {
+        const currentScrollY = window.scrollY;
+        const delta = currentScrollY - lastScrollY;
+
+        // Ocultar header al scrollear hacia abajo, asomar al scrollear hacia arriba
+        if (currentScrollY <= 15) {
+            document.body.classList.remove('header-hidden');
+        } else if (Math.abs(delta) > 6) {
+            if (delta > 0 && currentScrollY > 70) {
+                // Scrolleando hacia abajo: ocultar header si el menu movil no esta desplegado
+                if (!navElement || !navElement.classList.contains('nav-open')) {
+                    document.body.classList.add('header-hidden');
+                }
+            } else if (delta < 0) {
+                // Scrolleando hacia arriba: volver a mostrar header
+                document.body.classList.remove('header-hidden');
+            }
+        }
+        lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+
         const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
         const isNearBottom = scrollableHeight > 0 && window.scrollY >= (scrollableHeight - 120);
 

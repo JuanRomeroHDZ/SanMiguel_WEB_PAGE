@@ -85,6 +85,7 @@ p { text-wrap: pretty; }
     display: flex; align-items: center; justify-content: space-between; overflow: hidden;
     z-index: var(--z-topbar); font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
     padding-right: 8px;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .marquee-content { display: flex; white-space: nowrap; animation: scroll-top 40s linear infinite; flex-grow: 1; }
@@ -128,7 +129,23 @@ nav {
     background: rgba(10, 15, 26, 0.98);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    z-index: var(--z-nav); transition: background 0.3s ease, top 0.3s ease;
+    z-index: var(--z-nav);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, top 0.3s ease;
+}
+
+/* Ocultar header al scrollear hacia abajo */
+body.header-hidden .top-bar {
+    transform: translateY(-100%);
+}
+
+body.header-hidden nav {
+    transform: translateY(calc(-100% - var(--topbar-height)));
+}
+
+@media (max-width: 768px) {
+    body.header-hidden nav {
+        transform: translateY(-100%);
+    }
 }
 
 .brand-logo { 
