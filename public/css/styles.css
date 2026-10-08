@@ -831,6 +831,12 @@ body.is-bottom .nav-contact-wrapper { width: 155px; opacity: 1; padding-left: 1r
 .loc-map:active iframe, .loc-map:hover iframe { pointer-events: auto; }
 .loc-map:focus-within { outline: 3px solid var(--clr-wine); outline-offset: -3px; }
 
+@media (max-width: 768px) {
+    .loc-map,
+    .loc-map iframe {
+        min-height: 350px !important;
+    }
+}
 
 /* ==========================================================================
    9. FOOTER LISO Y FIRMA CENTRADA (GRID)
