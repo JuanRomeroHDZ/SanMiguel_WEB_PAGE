@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>San Miguel | Abarrotes</title>
     
     <meta name="description" content="Tienda San Miguel. Más de 15 años ofreciendo abarrotes, recargas, pan casero y más.">
@@ -22,8 +22,8 @@
     <!-- Estilos Oficiales -->
     <link rel="stylesheet" href="css/styles.css">
 
-    <!-- Script Principal Autónomo (Carga diferida) -->
-    <script defer src="js/main.js"></script>
+    <!-- Script Modular Autónomo (ES Modules) -->
+    <script type="module" src="js/main.js"></script>
 </head>
 <body>
     <a href="#catalogo" class="skip-link">Saltar al catálogo</a>
@@ -47,17 +47,28 @@
     </svg>
 
     <!-- Marquesina (Top Bar) -->
-    <div class="top-bar" aria-hidden="true">
-        <div class="marquee-content">
+    <!-- Marquesina (Top Bar) con pausa accesible WCAG 2.2.2 -->
+    <div class="top-bar" role="region" aria-label="Aviso de horarios de atención">
+        <div class="marquee-content" id="marqueeTrack">
             <span>ABIERTO TODOS LOS DÍAS <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> DE 7:00 AM A 9:00 PM <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> TIENDA SAN MIGUEL</span>
             <span>ABIERTO TODOS LOS DÍAS <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> DE 7:00 AM A 9:00 PM <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> TIENDA SAN MIGUEL</span>
         </div>
+        <button type="button" class="marquee-toggle" id="marqueeToggleBtn" aria-label="Pausar animación de marquesina" title="Pausar marquesina">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        </button>
     </div>
 
     <!-- Navegación HEADER OSCURO -->
     <nav aria-label="Navegación principal">
         <a href="#top" class="brand-logo">SAN MIGUEL</a>
-        <ul class="nav-links">
+        
+        <button type="button" class="mobile-nav-toggle" id="mobileNavToggle" aria-expanded="false" aria-controls="primaryNavLinks" aria-label="Abrir menú de navegación">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+        </button>
+
+        <ul class="nav-links" id="primaryNavLinks">
             <li><a href="#catalogo" class="standard-link" data-section="catalogo">Catálogo</a></li>
             <li><a href="#opiniones" class="standard-link" data-section="opiniones">Opiniones</a></li>
             <li><a href="#ubicacion" class="standard-link" data-section="ubicacion">Ubicación</a></li>
@@ -229,25 +240,26 @@
                 </div>
             </div>
             
-            <!-- Estructura del Carrusel -->
+            <!-- Estructura del Carrusel Rediseñado: Sin botones gigantes -->
             <div class="reviews-carousel-wrapper" id="reviewsCarouselWrapper">
-                <button type="button" class="carousel-nav-btn prev-btn" id="carouselPrevBtn" aria-label="Reseña anterior">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-                </button>
-
-                <div class="reviews-carousel-viewport" id="reviewsCarouselViewport">
+                <div class="reviews-carousel-viewport" id="reviewsCarouselViewport" aria-roledescription="carousel">
                     <div class="reviews-carousel-track" id="reviewsGrid">
-                        <!-- Las reseñas o estado limpio se inyectan mediante nodos DOM seguros -->
+                        <!-- Las reseñas o estado auténtico se inyectan mediante nodos DOM seguros -->
                     </div>
                 </div>
 
-                <button type="button" class="carousel-nav-btn next-btn" id="carouselNextBtn" aria-label="Siguiente reseña">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                </button>
+                <!-- Controles Compactos y Minimalistas -->
+                <div class="reviews-controls" id="reviewsControls">
+                    <button type="button" class="btn-ctrl-compact" id="carouselPrevBtn" aria-label="Opinión anterior">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                    </button>
+                    <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Navegación de reseñas"></div>
+                    <span class="carousel-counter" id="carouselCounter" aria-live="polite"></span>
+                    <button type="button" class="btn-ctrl-compact" id="carouselNextBtn" aria-label="Siguiente opinión">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                    </button>
+                </div>
             </div>
-
-            <!-- Indicadores (Dots) -->
-            <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Navegación de reseñas"></div>
 
             <div class="reviews-footer-cta">
                 <a href="https://www.google.com/maps/place/?q=place_id:ChIJL1WmDQA_2YARRj0C3nEAkW4" target="_blank" rel="noopener noreferrer" class="btn-outline">
@@ -317,7 +329,7 @@
         <div class="loc-map">
             <iframe 
                 title="Ubicación de Tienda San Miguel"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3365.243268165695!2d-116.82687685925531!3d32.49292659855821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1s0x80d93f000da6552f%3A0x6e910071de023d46!2sSanMiguel!5e0!3m2!1ses-419!2smx!4v1791492411222!5m2!1ses-419!2smx" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3365.243268165695!2d-116.82687685925531!3d32.49292659855821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80d93f000da6552f%3A0x6e910071de023d46!2sSanMiguel!5e0!3m2!1ses-419!2smx!4v1791492411222!5m2!1ses-419!2smx" 
                 width="100%" height="100%" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin">
             </iframe>
         </div>

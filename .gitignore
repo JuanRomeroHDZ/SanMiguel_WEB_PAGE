@@ -12,3 +12,6 @@ yarn-error.log*
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Archivos de respaldo temporales
+index_refactorizar.html
