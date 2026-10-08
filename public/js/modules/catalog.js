@@ -1,29 +1,160 @@
 /**
  * catalog.js - Modulo atomico para gestion del catalogo bento grid
- * Permite busqueda en tiempo real y filtrado por categorias accesible (aria-pressed, hidden)
+ * Renderizado de tarjetas desde arreglo de datos, busqueda en tiempo real y filtrado accesible (aria-pressed)
  */
+
+export const BENTO_PRODUCTS = [
+    {
+        id: 'pan',
+        title: 'Pan y Tortillas',
+        description: 'Tortillas de maíz y harina frescas, pan casero, bolillos del día, repostería y más.',
+        category: 'alimentos',
+        layout: 'item-large',
+        bgClass: 'bg-wine',
+        icon: '#svg-bread',
+        delay: ''
+    },
+    {
+        id: 'recargas',
+        title: 'Recargas',
+        description: 'Recargas telefónicas, pago de servicios básicos y más.',
+        category: 'extras',
+        layout: 'item-normal',
+        bgClass: 'bg-white',
+        icon: '#svg-phone',
+        delay: 'delay-1'
+    },
+    {
+        id: 'congelados',
+        title: 'Congelados',
+        description: 'Mangadas, chocobananas, bolsas de hielo y más.',
+        category: 'alimentos',
+        layout: 'item-normal',
+        bgClass: 'bg-dark',
+        icon: '#svg-ice',
+        delay: 'delay-2'
+    },
+    {
+        id: 'bebidas',
+        title: 'Bebidas Frescas',
+        description: 'Agua en garrafón, botellas, refrescos retornables y más.',
+        category: 'alimentos',
+        layout: 'item-tall',
+        bgClass: 'bg-soft',
+        icon: '#svg-bottle',
+        delay: 'delay-1'
+    },
+    {
+        id: 'abarrotes',
+        title: 'Abarrotes y Especias',
+        description: 'Condimentos, aceite, latería, abarrotes generales y más.',
+        category: 'alimentos',
+        layout: 'item-wide',
+        bgClass: 'bg-dark',
+        icon: '#svg-can',
+        delay: 'delay-2'
+    },
+    {
+        id: 'farmacia',
+        title: 'Farmacia Básica',
+        description: 'Pastillas, vendas, alcohol, algodón, cuidado personal y más.',
+        category: 'hogar',
+        layout: 'item-normal',
+        bgClass: 'bg-white',
+        icon: '#svg-pills',
+        delay: 'delay-3'
+    },
+    {
+        id: 'botanas',
+        title: 'Botanas & Dulces',
+        description: 'Sabritas, dulces sueltos, chocolates, cigarros y más.',
+        category: 'alimentos',
+        layout: 'item-normal',
+        bgClass: 'bg-wine',
+        icon: '#svg-candy',
+        delay: 'delay-2'
+    },
+    {
+        id: 'ferreteria',
+        title: 'Ferretería & Mascotas',
+        description: 'Focos, pilas, Kola Loka, croquetas, carbón, veladoras, inciensos y más.',
+        category: 'extras',
+        layout: 'item-wide',
+        bgClass: 'bg-soft',
+        icon: '#svg-tools',
+        delay: 'delay-3'
+    },
+    {
+        id: 'desechables',
+        title: 'Desechables',
+        description: 'Platos, vasos, aluminio, artículos de limpieza fuertes y más.',
+        category: 'hogar',
+        layout: 'item-normal',
+        bgClass: 'bg-white',
+        icon: '#svg-clean',
+        delay: 'delay-4'
+    }
+];
+
+function createSvgUseNode(symbolId, width, height, className) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', className);
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('width', String(width));
+    svg.setAttribute('height', String(height));
+    svg.setAttribute('viewBox', '0 0 24 24');
+
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', symbolId);
+    svg.appendChild(use);
+    return svg;
+}
+
+function createBentoCard(item) {
+    const card = document.createElement('article');
+    const delayClass = item.delay ? ` ${item.delay}` : '';
+    card.className = `bento-item ${item.layout} pop-in ${item.bgClass}${delayClass}`;
+    card.dataset.category = item.category;
+    card.dataset.layout = item.layout;
+
+    const icon = createSvgUseNode(item.icon, 42, 42, 'bento-icon');
+    const watermark = createSvgUseNode(item.icon, 160, 160, 'bento-watermark');
+
+    const title = document.createElement('h3');
+    title.textContent = item.title;
+
+    const desc = document.createElement('p');
+    desc.textContent = item.description;
+
+    card.appendChild(icon);
+    card.appendChild(watermark);
+    card.appendChild(title);
+    card.appendChild(desc);
+
+    return card;
+}
 
 export function initCatalog() {
     const filterContainer = document.getElementById('filterContainer');
     const searchInput = document.getElementById('searchInput');
     const clearSearchBtn = document.getElementById('clearSearch');
     const resetFiltersBtn = document.getElementById('resetFiltersBtn');
-    const cards = document.querySelectorAll('.bento-item');
     const noResultsMsg = document.getElementById('noResultsMsg');
     const bentoGrid = document.getElementById('bentoGrid');
 
-    if (!cards.length || !bentoGrid) return;
+    if (!bentoGrid) return;
 
+    // Renderizar tarjetas desde el arreglo atomico de productos
+    while (bentoGrid.firstChild) {
+        bentoGrid.removeChild(bentoGrid.firstChild);
+    }
+    BENTO_PRODUCTS.forEach(item => {
+        bentoGrid.appendChild(createBentoCard(item));
+    });
+
+    const cards = bentoGrid.querySelectorAll('.bento-item');
     let currentFilter = 'all';
     let currentSearch = '';
-
-    // Guardar distribucion visual inicial
-    cards.forEach(card => {
-        if (card.classList.contains('item-large')) card.dataset.layout = 'item-large';
-        else if (card.classList.contains('item-tall')) card.dataset.layout = 'item-tall';
-        else if (card.classList.contains('item-wide')) card.dataset.layout = 'item-wide';
-        else card.dataset.layout = 'item-normal';
-    });
 
     const render = () => {
         let visibleCount = 0;
