@@ -1,0 +1,17 @@
+{
+  "name": "sanmiguel-web-page",
+  "version": "1.0.0",
+  "description": "Sitio web oficial y catalogo para Tienda San Miguel Abarrotes",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "abarrotes",
+    "san-miguel",
+    "tijuana"
+  ],
+  "author": "JR",
+  "license": "ISC"
+}

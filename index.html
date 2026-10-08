@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>San Miguel | Abarrotes</title>
+    
+    <meta name="description" content="Tienda San Miguel. Más de 15 años ofreciendo abarrotes, recargas, pan casero y más.">
+    <meta name="theme-color" content="#0A0F1A">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="San Miguel | Abarrotes">
+    <meta property="og:description" content="De todo un poco: abarrotes, lácteos, pan fresco, recargas y servicios. Abierto todos los días de 7:00 AM a 9:00 PM.">
+    <meta property="og:locale" content="es_MX">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237A1022'><path d='M4 6h16v2H4zm2 4h12v10H6zm3 2v6h2v-6zm4 0v6h2v-6zM3 4h18v2H3z'/></svg>">
+    
+    <!-- Google Fonts Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.google.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QFVF820EBY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-QFVF820EBY');
+    </script>
+
+    <!-- Hojas de Estilo -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <a href="#catalogo" class="skip-link">Saltar al catálogo</a>
+
+    <!-- Repositorio SVG Global (Rendimiento Defs) -->
+    <svg style="display:none;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <path id="svg-clean" d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/>
+            <path id="svg-can" d="M19 4H5v16h14V4zm-2 14H7V6h10v12z"/>
+            <path id="svg-bottle" d="M7 21h10v-2H7v2zm5-19C9.24 2 7 4.24 7 7c0 2.21 1.48 4.08 3.5 4.75V17h3v-5.25C15.52 11.08 17 9.21 17 7c0-2.76-2.24-5-5-5z"/>
+            <path id="svg-pills" d="M16 2.5a5.5 5.5 0 00-7.78 0l-5.72 5.72a5.5 5.5 0 007.78 7.78l5.72-5.72a5.5 5.5 0 000-7.78zm-6.36 12.02a3.5 3.5 0 01-4.95-4.95l1.41-1.41 4.95 4.95-1.41 1.41zm7.78-7.78l-1.41 1.41-4.95-4.95 1.41-1.41a3.5 3.5 0 014.95 4.95z"/>
+            <!-- Pan real: forma ovalada de bolillo con cortes -->
+            <path id="svg-bread" d="M4 10c0-3.31 2.69-6 6-6h4c3.31 0 6 2.69 6 6 0 1.18-.34 2.28-.93 3.21L12 21l-7.07-7.79C4.34 12.28 4 11.18 4 10zm3-2.5c-.83 0-1.5.67-1.5 1.5h1.5V7.5zm5 0c-.83 0-1.5.67-1.5 1.5H12V7.5zm5 0c-.83 0-1.5.67-1.5 1.5H17V7.5z"/>
+            <!-- Ubicación: pin de mapa -->
+            <path id="svg-pin" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/>
+            <path id="svg-mp" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            <path id="svg-card" d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+            <path id="svg-cash" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            <path id="svg-star" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </defs>
+    </svg>
+
+    <!-- Marquesina (Top Bar) -->
+    <div class="top-bar" aria-hidden="true">
+        <div class="marquee-content">
+            <span>ABIERTO TODOS LOS DÍAS <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> DE 7:00 AM A 9:00 PM <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> TIENDA SAN MIGUEL</span>
+            <span>ABIERTO TODOS LOS DÍAS <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> DE 7:00 AM A 9:00 PM <svg width="24" height="24" viewBox="0 0 24 24"><use href="#svg-star"/></svg> TIENDA SAN MIGUEL</span>
+        </div>
+    </div>
+
+    <!-- Navegación HEADER OSCURO -->
+    <nav aria-label="Navegación principal">
+        <a href="#top" class="brand-logo">SAN MIGUEL</a>
+        <ul class="nav-links">
+            <li><a href="#catalogo" class="standard-link" data-section="catalogo">Catálogo</a></li>
+            <li><a href="#opiniones" class="standard-link" data-section="opiniones">Opiniones</a></li>
+            <li><a href="#ubicacion" class="standard-link" data-section="ubicacion">Ubicación</a></li>
+            <li>
+                <div class="nav-contact-wrapper">
+                    <a href="https://wa.me/526644267704" class="nav-contact-btn" target="_blank" rel="noopener noreferrer" aria-label="Enviar mensaje a WhatsApp">
+                        <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.127.554 4.197 1.606 6.012L.182 24l6.108-1.599A11.97 11.97 0 0 0 12.031 24c6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm0 21.996c-1.802 0-3.565-.484-5.11-1.399l-.367-.217-3.801.996.996-3.801-.217-.367C2.495 15.545 2.01 13.782 2.01 12.031 2.01 6.505 6.505 2.01 12.031 2.01c5.526 0 10.021 4.495 10.021 10.021S17.557 21.996 12.031 21.996zm5.501-7.518c-.302-.151-1.785-.882-2.062-.983-.277-.101-.478-.151-.679.151-.201.302-.779.983-.956 1.184-.177.201-.352.227-.654.076-1.505-.753-2.616-1.39-3.569-2.656-.252-.335.253-.309.839-1.48.076-.151.038-.277-.038-.428-.076-.151-.679-1.637-.931-2.241-.246-.593-.495-.512-.679-.522-.177-.01-.378-.01-.579-.01-.201 0-.528.076-.805.378-.277.302-1.057 1.032-1.057 2.516 0 1.484 1.082 2.918 1.233 3.12.151.201 2.127 3.245 5.15 4.545 2.014.863 2.766.704 3.268.591.547-.123 1.785-.73 2.037-1.435.252-.704.252-1.308.177-1.435-.075-.127-.276-.201-.578-.352z"/></svg>
+                        Contacto
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Animación ICMP (Fondo de red) -->
+    <div class="network-canvas" aria-hidden="true">
+        <svg class="icmp-packet pkt-1" width="24" height="24" viewBox="0 0 24 24"><use href="#svg-clean"/></svg>
+        <svg class="icmp-packet pkt-2" width="24" height="24" viewBox="0 0 24 24"><use href="#svg-can"/></svg>
+        <svg class="icmp-packet pkt-3" width="24" height="24" viewBox="0 0 24 24"><use href="#svg-bottle"/></svg>
+        <svg class="icmp-packet pkt-4" width="24" height="24" viewBox="0 0 24 24"><use href="#svg-pills"/></svg>
+        <svg class="icmp-packet pkt-5" width="24" height="24" viewBox="0 0 24 24"><use href="#svg-bread"/></svg>
+        <svg class="icmp-packet pkt-6" width="24" height="24" viewBox="0 0 24 24"><use href="#svg-clean"/></svg>
+    </div>
+
+    <!-- Sección Hero -->
+    <header class="hero container" id="top">
+        <div style="max-width: 900px;">
+            <div class="hero-badge">Est. hace más de 15 años</div>
+            <h1>De todo <br><span>un poco.</span></h1>
+            <p>Lo básico para tu día a día. Abarrotes, lácteos, pan fresco, limpieza y esos antojitos que siempre hacen falta. Todo a un paso de tu casa.</p>
+            <div class="hero-cta-group">
+                <a href="#catalogo" class="btn-hero-primary">Ver el catálogo</a>
+                <a href="https://wa.me/526644267704" class="btn-hero-secondary" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.127.554 4.197 1.606 6.012L.182 24l6.108-1.599A11.97 11.97 0 0 0 12.031 24c6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm0 21.996c-1.802 0-3.565-.484-5.11-1.399l-.367-.217-3.801.996.996-3.801-.217-.367C2.495 15.545 2.01 13.782 2.01 12.031 2.01 6.505 6.505 2.01 12.031 2.01c5.526 0 10.021 4.495 10.021 10.021S17.557 21.996 12.031 21.996zm5.501-7.518c-.302-.151-1.785-.882-2.062-.983-.277-.101-.478-.151-.679.151-.201.302-.779.983-.956 1.184-.177.201-.352.227-.654.076-1.505-.753-2.616-1.39-3.569-2.656-.252-.335.253-.309.839-1.48.076-.151.038-.277-.038-.428-.076-.151-.679-1.637-.931-2.241-.246-.593-.495-.512-.679-.522-.177-.01-.378-.01-.579-.01-.201 0-.528.076-.805.378-.277.302-1.057 1.032-1.057 2.516 0 1.484 1.082 2.918 1.233 3.12.151.201 2.127 3.245 5.15 4.545 2.014.863 2.766.704 3.268.591.547-.123 1.785-.73 2.037-1.435.252-.704.252-1.308.177-1.435-.075-.127-.276-.201-.578-.352z"/></svg>
+                    Mándanos un mensaje
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Catálogo de Productos con Bento Grid -->
+    <main class="bento-section container" id="catalogo">
+        <div class="catalogo-header">
+            <h2 class="section-header" style="margin: 0;">Nuestro<br>Inventario.</h2>
+            
+            <!-- Barra de Búsqueda -->
+            <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <input type="text" id="searchInput" placeholder="Buscar un producto..." aria-label="Buscar producto en el catálogo">
+                
+                <button type="button" id="clearSearch" class="search-clear" aria-label="Limpiar búsqueda">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Filtros de Categorías Sticky -->
+        <div class="filter-wrapper">
+            <div class="filter-container" id="filterContainer">
+                <button class="filter-pill active" data-filter="all">Todos</button>
+                <button class="filter-pill" data-filter="alimentos">Alimentos & Bebidas</button>
+                <button class="filter-pill" data-filter="hogar">Hogar & Cuidado</button>
+                <button class="filter-pill" data-filter="extras">Servicios & Extras</button>
+            </div>
+        </div>
+
+        <!-- Estado Sin Resultados -->
+        <div id="noResultsMsg" class="no-results-msg" role="status" aria-live="polite">
+            <h3>¿No lo encuentras aquí?</h3>
+            <p>Es probable que sí lo tengamos en tienda o podamos conseguírtelo.</p>
+            <div class="action-buttons-group">
+                <a href="https://wa.me/526644267704" class="btn-outline" target="_blank" rel="noopener noreferrer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.127.554 4.197 1.606 6.012L.182 24l6.108-1.599A11.97 11.97 0 0 0 12.031 24c6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm0 21.996c-1.802 0-3.565-.484-5.11-1.399l-.367-.217-3.801.996.996-3.801-.217-.367C2.495 15.545 2.01 13.782 2.01 12.031 2.01 6.505 6.505 2.01 12.031 2.01c5.526 0 10.021 4.495 10.021 10.021S17.557 21.996 12.031 21.996zm5.501-7.518c-.302-.151-1.785-.882-2.062-.983-.277-.101-.478-.151-.679.151-.201.302-.779.983-.956 1.184-.177.201-.352.227-.654.076-1.505-.753-2.616-1.39-3.569-2.656-.252-.335.253-.309.839-1.48.076-.151.038-.277-.038-.428-.076-.151-.679-1.637-.931-2.241-.246-.593-.495-.512-.679-.522-.177-.01-.378-.01-.579-.01-.201 0-.528.076-.805.378-.277.302-1.057 1.032-1.057 2.516 0 1.484 1.082 2.918 1.233 3.12.151.201 2.127 3.245 5.15 4.545 2.014.863 2.766.704 3.268.591.547-.123 1.785-.73 2.037-1.435.252-.704.252-1.308.177-1.435-.075-.127-.276-.201-.578-.352z"/></svg>
+                    Preguntar por WhatsApp
+                </a>
+                <button type="button" id="resetFiltersBtn" class="btn-outline">Volver al catálogo</button>
+            </div>
+        </div>
+        
+        <!-- Bento Grid de Categorías -->
+        <div class="bento-grid" id="bentoGrid">
+            
+            <article class="bento-item item-large pop-in bg-wine" data-category="alimentos">
+                <svg class="bento-icon" aria-hidden="true" width="42" height="42" viewBox="0 0 24 24"><use href="#svg-bread"/></svg>
+                <svg class="bento-watermark" aria-hidden="true" width="160" height="160" viewBox="0 0 24 24"><use href="#svg-bread"/></svg>
+                <h3>Pan y Tortillas</h3>
+                <p>Tortillas de maíz y harina frescas, pan casero, bolillos del día, repostería y más.</p>
+            </article>
+
+            <article class="bento-item item-normal pop-in bg-white" data-category="extras" style="animation-delay: 0.1s;">
+                <svg class="bento-icon" aria-hidden="true" width="42" height="42" viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+                <svg class="bento-watermark" aria-hidden="true" width="160" height="160" viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+                <h3>Recargas</h3>
+                <p>Recargas telefónicas, pago de servicios básicos y más.</p>
+            </article>
+
+            <article class="bento-item item-normal pop-in bg-dark" data-category="alimentos" style="animation-delay: 0.2s;">
+                <svg class="bento-icon" aria-hidden="true" width="42" height="42" viewBox="0 0 24 24"><path d="M12 22A10 10 0 1 1 22 12A10 10 0 0 1 12 22Zm-1-14v4l3.5 2l1-1.5L13 11.5V8Z"/></svg>
+                <svg class="bento-watermark" aria-hidden="true" width="160" height="160" viewBox="0 0 24 24"><path d="M12 22A10 10 0 1 1 22 12A10 10 0 0 1 12 22Zm-1-14v4l3.5 2l1-1.5L13 11.5V8Z"/></svg>
+                <h3>Congelados</h3>
+                <p>Mangadas, chocobananas, bolsas de hielo y más.</p>
+            </article>
+
+            <article class="bento-item item-tall pop-in bg-soft" data-category="alimentos" style="animation-delay: 0.1s;">
+                <svg class="bento-icon" aria-hidden="true" width="42" height="42" viewBox="0 0 24 24"><use href="#svg-bottle"/></svg>
+                <svg class="bento-watermark" aria-hidden="true" width="160" height="160" viewBox="0 0 24 24"><use href="#svg-bottle"/></svg>
+                <h3>Bebidas Frescas</h3>
+                <p>Agua en garrafón, botellas, refrescos retornables y más.</p>
+            </article>
+
+            <article class="bento-item item-wide pop-in bg-dark" data-category="alimentos" style="animation-delay: 0.2s;">
+                <svg class="bento-icon" aria-hidden="true" width="42" height="42" viewBox="0 0 24 24"><use href="#svg-can"/></svg>
+                <svg class="bento-watermark" aria-hidden="true" width="160" height="160" viewBox="0 0 24 24"><use href="#svg-can"/></svg>
+                <h3>Abarrotes y Especias</h3>
+                <p>Condimentos, aceite, latería, abarrotes generales y más.</p>
+            </article>
+
+            <article class="bento-item item-normal pop-in bg-white" data-category="hogar" style="animation-delay: 0.3s;">
+                <svg class="bento-icon" aria-hidden="true" width="42" height="42" viewBox="0 0 24 24"><use href="#svg-pills"/></svg>
+                <svg class="bento-watermark" aria-hidden="true" width="160" height="160" viewBox="0 0 24 24"><use href="#svg-pills"/></svg>
+                <h3>Farmacia Básica</h3>
+                <p>Pastillas, vendas, alcohol, algodón, cuidado personal y más.</p>
+            </article>
+
+            <article class="bento-item item-normal pop-in bg-wine" data-category="alimentos" style="animation-delay: 0.2s;">
+                <svg class="bento-icon" aria-hidden="true" width="42" height="42" viewBox="0 0 24 24"><path d="M22 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.08 0-2.02.57-2.55 1.41C13.91 2.53 13.01 2 12 2s-1.91.53-2.45 1.41C9.02 2.57 8.08 2 7 2 5.34 2 4 3.34 4 5c0 .35.07.69.18 1H2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z"/></svg>
+                <svg class="bento-watermark" aria-hidden="true" width="160" height="160" viewBox="0 0 24 24"><path d="M22 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.08 0-2.02.57-2.55 1.41C13.91 2.53 13.01 2 12 2s-1.91.53-2.45 1.41C9.02 2.57 8.08 2 7 2 5.34 2 4 3.34 4 5c0 .35.07.69.18 1H2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z"/></svg>
+                <h3>Botanas & Dulces</h3>
+                <p>Sabritas, dulces sueltos, chocolates, cigarros y más.</p>
+            </article>
+
+            <article class="bento-item item-wide pop-in bg-soft" data-category="extras" style="animation-delay: 0.3s;">
+                <svg class="bento-icon" aria-hidden="true" width="42" height="42" viewBox="0 0 24 24"><path d="M21 11.06V8c0-1.1-.9-2-2-2h-3V4c0-1.1-.9-2-2-2H4C2.9 2 2 2.9 2 4v16c0 1.1.9 2 2 2h15c1.1 0 2-.9 2-2v-4.06c1.25-.33 2.19-1.4 2.3-2.68.04-.46-.07-.91-.29-1.3-.23-.39-.59-.7-1.01-.9z"/></svg>
+                <svg class="bento-watermark" aria-hidden="true" width="160" height="160" viewBox="0 0 24 24"><path d="M21 11.06V8c0-1.1-.9-2-2-2h-3V4c0-1.1-.9-2-2-2H4C2.9 2 2 2.9 2 4v16c0 1.1.9 2 2 2h15c1.1 0 2-.9 2-2v-4.06c1.25-.33 2.19-1.4 2.3-2.68.04-.46-.07-.91-.29-1.3-.23-.39-.59-.7-1.01-.9z"/></svg>
+                <h3>Ferretería & Mascotas</h3>
+                <p>Focos, pilas, Kola Loka, croquetas, carbón, veladoras, inciensos y más.</p>
+            </article>
+
+            <article class="bento-item item-normal pop-in bg-white" data-category="hogar" style="animation-delay: 0.4s;">
+                <svg class="bento-icon" aria-hidden="true" width="42" height="42" viewBox="0 0 24 24"><use href="#svg-clean"/></svg>
+                <svg class="bento-watermark" aria-hidden="true" width="160" height="160" viewBox="0 0 24 24"><use href="#svg-clean"/></svg>
+                <h3>Desechables</h3>
+                <p>Platos, vasos, aluminio, artículos de limpieza fuertes y más.</p>
+            </article>
+
+        </div>
+    </main>
+
+    <!-- Sección de Reseñas de Google Places (Carrusel Automático) -->
+    <section class="reviews-section" id="opiniones" aria-label="Opiniones de clientes">
+        <div class="container">
+            <div class="reviews-header">
+                <div class="reviews-title-group">
+                    <h2>Opiniones de<br>Nuestros Clientes.</h2>
+                    <p>Lo que dicen nuestros vecinos de Tienda San Miguel en Google Maps.</p>
+                </div>
+                <div class="google-rating-summary" aria-label="Calificación promedio en Google: 4.9 de 5 estrellas">
+                    <div class="rating-score" id="ratingScoreVal">4.9</div>
+                    <div class="rating-stars-wrapper">
+                        <div class="stars-row" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><use href="#svg-star"/></svg>
+                            <svg viewBox="0 0 24 24"><use href="#svg-star"/></svg>
+                            <svg viewBox="0 0 24 24"><use href="#svg-star"/></svg>
+                            <svg viewBox="0 0 24 24"><use href="#svg-star"/></svg>
+                            <svg viewBox="0 0 24 24"><use href="#svg-star"/></svg>
+                        </div>
+                        <span class="rating-count-text">Google Reviews</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Estructura del Carrusel -->
+            <div class="reviews-carousel-wrapper" id="reviewsCarouselWrapper">
+                <button type="button" class="carousel-nav-btn prev-btn" id="carouselPrevBtn" aria-label="Reseña anterior">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+
+                <div class="reviews-carousel-viewport" id="reviewsCarouselViewport">
+                    <div class="reviews-carousel-track" id="reviewsGrid">
+                        <!-- Las 5 reseñas se inyectan dinámicamente aquí -->
+                    </div>
+                </div>
+
+                <button type="button" class="carousel-nav-btn next-btn" id="carouselNextBtn" aria-label="Siguiente reseña">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                </button>
+            </div>
+
+            <!-- Indicadores (Dots) -->
+            <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Navegación de reseñas"></div>
+
+            <div class="reviews-footer-cta">
+                <a href="https://www.google.com/maps/place/?q=place_id:ChIJL1WmDQA_2YARRj0C3nEAkW4" target="_blank" rel="noopener noreferrer" class="btn-outline">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><use href="#svg-pin"/></svg>
+                    Ver y dejar opiniones en Google Maps
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Ubicación y Mapa -->
+    <section class="location-section" id="ubicacion">
+        <div class="loc-info">
+            <h2>Dónde<br>encontrarnos.</h2>
+            
+            <div class="info-grid-internal">
+                <div class="loc-detail" style="margin-bottom: 0; padding-bottom: 0; border: none;">
+                    
+                    <!-- Estado Abierto/Cerrado calculado en vivo según la hora actual -->
+                    <div class="status-badge" id="statusBadge">
+                        <span class="status-dot"></span> <span id="statusText">Abierto hoy</span>
+                    </div>
+                    
+                    <h4>Horarios de Servicio</h4>
+                    <p>Lunes a Domingo</p>
+                    <span class="loc-schedule">7:00 AM — 9:00 PM</span>
+                </div>
+
+                <div class="loc-detail" style="border: none;">
+                    <h4>Dirección</h4>
+                    <p>Tijuana, Baja California, México</p>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=32.49292659855821,-116.82687685925531" target="_blank" rel="noopener noreferrer" class="btn-outline" style="margin-top: 14px; padding: 8px 18px; font-size: 0.85rem;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><use href="#svg-pin"/></svg>
+                        Cómo llegar
+                    </a>
+                </div>
+
+                <div class="loc-detail" style="border: none;">
+                    <h4>Métodos de Pago</h4>
+                    <div class="payments-list">
+                        
+                        <div class="pay-method">
+                            <div class="pay-icon-box mp">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#svg-mp"/></svg>
+                            </div>
+                            <span>Mercado Pago</span>
+                        </div>
+
+                        <div class="pay-method">
+                            <div class="pay-icon-box card">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#svg-card"/></svg>
+                            </div>
+                            <span>Tarjetas</span>
+                        </div>
+
+                        <div class="pay-method">
+                            <div class="pay-icon-box cash">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#svg-cash"/></svg>
+                            </div>
+                            <span>Efectivo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loc-map">
+            <iframe 
+                title="Ubicación de Tienda San Miguel"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3365.243268165695!2d-116.82687685925531!3d32.49292659855821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80d93f000da6552f%3A0x6e910071de023d46!2sSanMiguel!5e0!3m2!1ses-419!2smx!4v1791492411222!5m2!1ses-419!2smx" 
+                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-massive">SAN MIGUEL</div>
+        <div class="footer-bottom">
+            <span>Tijuana, Baja California, México.</span>
+            
+            <span class="author-signature" aria-label="Made with love by JR">
+                Made with 
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> 
+                by JR
+            </span>
+
+            <span>&copy; <span id="footerYear">2026</span> Todos los derechos reservados.</span>
+        </div>
+    </footer>
+
+    <!-- Botón Flotante de WhatsApp (FAB) -->
+    <a href="https://wa.me/526644267704" id="whatsappFab" class="fab" target="_blank" rel="noopener noreferrer" aria-label="Mándanos un mensaje por WhatsApp">
+        <div class="fab-icon-wrapper">
+            <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.127.554 4.197 1.606 6.012L.182 24l6.108-1.599A11.97 11.97 0 0 0 12.031 24c6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm0 21.996c-1.802 0-3.565-.484-5.11-1.399l-.367-.217-3.801.996.996-3.801-.217-.367C2.495 15.545 2.01 13.782 2.01 12.031 2.01 6.505 6.505 2.01 12.031 2.01c5.526 0 10.021 4.495 10.021 10.021S17.557 21.996 12.031 21.996zm5.501-7.518c-.302-.151-1.785-.882-2.062-.983-.277-.101-.478-.151-.679.151-.201.302-.779.983-.956 1.184-.177.201-.352.227-.654.076-1.505-.753-2.616-1.39-3.569-2.656-.252-.335.253-.309.839-1.48.076-.151.038-.277-.038-.428-.076-.151-.679-1.637-.931-2.241-.246-.593-.495-.512-.679-.522-.177-.01-.378-.01-.579-.01-.201 0-.528.076-.805.378-.277.302-1.057 1.032-1.057 2.516 0 1.484 1.082 2.918 1.233 3.12.151.201 2.127 3.245 5.15 4.545 2.014.863 2.766.704 3.268.591.547-.123 1.785-.73 2.037-1.435.252-.704.252-1.308.177-1.435-.075-.127-.276-.201-.578-.352z"/>
+            </svg>
+        </div>
+    </a>
+
+    <!-- Script Principal Autónomo (Compatible con file:/// y http://) -->
+    <script defer src="js/main.js"></script>
+</body>
+</html>
