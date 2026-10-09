@@ -57,7 +57,13 @@ a, button, input { touch-action: manipulation; }
 h1, h2, h3 { text-wrap: balance; } 
 p { text-wrap: pretty; }
 
-.svg-defs { display: none; }
+.svg-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
 
 /* Enlace de salto para accesibilidad */
 .skip-link {
@@ -297,7 +303,7 @@ body.is-bottom .nav-contact-wrapper { width: 155px; opacity: 1; padding-left: 1r
 
 @media (max-width: 768px) { .icmp-packet { opacity: 0.03 !important; } }
 @media (prefers-reduced-motion: reduce) { 
-    .icmp-packet, .marquee-content, .bento-item, .pop-in { animation: none !important; display: none; transform: none !important; } 
+    .icmp-packet { display: none !important; } 
 }
 
 /* ==========================================================================
@@ -790,9 +796,8 @@ body.is-bottom .nav-contact-wrapper { width: 155px; opacity: 1; padding-left: 1r
    ========================================================================== */
 .location-section {
     display: grid; grid-template-columns: 1fr 1fr; border-top: var(--border-subtle); border-bottom: var(--border-subtle);
-    background: #fff; position: relative; z-index: var(--z-base); opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    background: #fff; position: relative; z-index: var(--z-base);
 }
-.location-section.visible { opacity: 1; transform: translateY(0); }
 
 @media (max-width: 900px) { .location-section { grid-template-columns: 1fr; } }
 
@@ -827,8 +832,7 @@ body.is-bottom .nav-contact-wrapper { width: 155px; opacity: 1; padding-left: 1r
 }
 
 .loc-map { width: 100%; height: 100%; min-height: 400px; position: relative; background: #e2e8f0; transition: transform 0.3s ease; border-left: 1px solid rgba(0,0,0,0.05); }
-.loc-map iframe { width: 100%; height: 100%; min-height: 400px; border: 0; filter: grayscale(30%) contrast(110%); pointer-events: none; }
-.loc-map:active iframe, .loc-map:hover iframe { pointer-events: auto; }
+.loc-map iframe { width: 100%; height: 100%; min-height: 400px; border: 0; filter: grayscale(10%) contrast(105%); pointer-events: auto; }
 .loc-map:focus-within { outline: 3px solid var(--clr-wine); outline-offset: -3px; }
 
 @media (max-width: 768px) {

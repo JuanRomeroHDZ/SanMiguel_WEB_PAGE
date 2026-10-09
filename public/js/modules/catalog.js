@@ -106,6 +106,7 @@ function createSvgUseNode(symbolId, width, height, className) {
 
     const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     use.setAttribute('href', symbolId);
+    use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', symbolId);
     svg.appendChild(use);
     return svg;
 }
@@ -249,4 +250,5 @@ export function initCatalog() {
     if (resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetAll);
 
     updateFilterPills('all');
+    render();
 }

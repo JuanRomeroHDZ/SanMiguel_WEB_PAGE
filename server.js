@@ -42,7 +42,7 @@ function setSecurityHeaders(res) {
         "style-src 'self' https://fonts.googleapis.com",
         "font-src 'self' https://fonts.gstatic.com data:",
         "img-src 'self' data: https://lh3.googleusercontent.com",
-        "frame-src https://www.google.com",
+        "frame-src https://www.google.com https://maps.google.com",
         "connect-src 'self'",
         "object-src 'none'",
         "base-uri 'self'",
