@@ -9,37 +9,45 @@
 ### Raíz del Proyecto
 | Archivo | Ubicación | Responsabilidad principal |
 | :--- | :--- | :--- |
-| `server.js` | `/server.js` | Servidor local seguro en Node.js puro (ESM). Inyecta cabeceras de seguridad estrictas (CSP, X-Frame-Options, HSTS), sirve archivos desde `/public` previniendo path traversal y delega `/api/reviews` a la función serverless. |
-| `netlify.toml` | `/netlify.toml` | Configuración de despliegue en Netlify: define `publish = "public"`, enrutamiento de funciones y cabeceras de seguridad idénticas a producción. |
+| `server.js` | `/server.js` | Servidor local seguro en Node.js puro (ESM). Inyecta cabeceras de seguridad estrictas (CSP, X-Frame-Options, HSTS), sirve archivos estáticos desde `/public` con prevención estricta de path traversal (`decodeURIComponent` + `path.resolve`). |
+| `netlify.toml` | `/netlify.toml` | Configuración de despliegue en Netlify: define `publish = "public"` y cabeceras de seguridad HTTP idénticas a producción. |
 | `package.json` | `/package.json` | Manifiesto de Node.js (`"type": "module"`, script `"start": "node server.js"`). |
-| `.env.example` | `/.env.example` | Plantilla pública de variables requeridas (`GOOGLE_PLACES_API_KEY`, `GOOGLE_PLACE_ID`, `PORT`). |
-| `.gitignore` | `/.gitignore` | Bloquea la subida de `.env`, dependencias y respaldos temporales a git. |
+| `.env` / `.env.example` | `/.env` / `/.env.example` | Configuración de entorno del servidor local (`PORT`, `HOST`). `.env` permanece ignorado por git. |
+| `.gitignore` | `/.gitignore` | Bloquea la subida de `.env`, dependencias de desarrollo y respaldos temporales a git. |
 | `BITACORA.md` | `/BITACORA.md` | Registro de componentes, arquitectura e historial de modificaciones. |
-
-### Backend Serverless
-| Archivo | Ubicación | Responsabilidad principal |
-| :--- | :--- | :--- |
-| `reviews.mjs` | `/netlify/functions/reviews.mjs` | Endpoint único serverless para consultar Google Places API (New). Sanitiza cadenas, maneja caché en memoria y retorna un JSON seguro sin exponer credenciales. |
 
 ### Frontend Estático (`public/`)
 | Archivo | Ubicación | Responsabilidad principal |
 | :--- | :--- | :--- |
-| `index.html` | `/public/index.html` | Estructura semántica principal, metadatos SEO / Open Graph, Schema.org LocalBusiness, repositorio SVG (`<symbol>`), Bento Grid, carrusel accesible y mapa de ubicación. |
+| `index.html` | `/public/index.html` | Estructura semántica principal, metadatos SEO / Open Graph, Schema.org LocalBusiness, repositorio SVG (`<symbol>`), Bento Grid y mapa de ubicación. Sin elementos o años hardcodeados. |
 | `styles.css` | `/public/css/styles.css` | Estilos visuales con variables CSS, layout Bento Grid responsivo, animaciones, reglas de accesibilidad (contraste 4.5:1+, áreas táctiles de 44px+) y soporte para `prefers-reduced-motion`. |
 | `main.js` | `/public/js/main.js` | Orquestador de inicio en cliente; importa e inicializa los módulos al cargar `DOMContentLoaded`. |
 
 ### Módulos JavaScript (`public/js/modules/`)
 | Módulo | Ubicación | Responsabilidad principal |
 | :--- | :--- | :--- |
-| `catalog.js` | `/public/js/modules/catalog.js` | Renderizado del Bento Grid desde arreglo de datos estructurado, búsqueda en tiempo real y filtrado de categorías con atributos accesibles (`aria-pressed`). |
-| `reviews.js` | `/public/js/modules/reviews.js` | Carrusel automático de 5 testimonios con controles WCAG 2.2.2 (play/pause, pausa al hover y foco), navegación por pestañas (`role="tab"`), gestos táctiles y sincronización no bloqueante con Google Places. |
+| `catalog.js` | `/public/js/modules/catalog.js` | Renderizado del Bento Grid desde arreglo estructurado de productos, búsqueda en tiempo real y filtrado de categorías con atributos accesibles (`aria-pressed`). |
 | `navigation.js` | `/public/js/modules/navigation.js` | Control de menú móvil, marquesina accesible con pausa, scrollspy y comportamiento del header (se oculta al bajar y reaparece al subir o al llegar al fondo para mostrar el botón de WhatsApp). |
-| `schedule.js` | `/public/js/modules/schedule.js` | Verificación en tiempo real del estado Abierto/Cerrado basado exclusivamente en la zona horaria `America/Tijuana` (Lunes a Domingo 7:00 AM - 9:00 PM). |
+| `schedule.js` | `/public/js/modules/schedule.js` | Verificación en tiempo real del estado Abierto/Cerrado basado exclusivamente en la zona horaria `America/Tijuana` (Lunes a Domingo 7:00 AM - 9:00 PM), con normalización de medianoche (`% 24`). |
 | `analytics.js` | `/public/js/modules/analytics.js` | Controlador de analítica y privacidad sin inyección de scripts externos, manteniendo estricto el CSP. |
 
 ---
 
 ## 2. Historial de Modificaciones
+
+### [2026-10-08] - Eliminación total de reseñas y depuración de datos hardcodeados
+* **Eliminación de Reseñas / Opiniones:**
+  * Eliminada la sección HTML `#opiniones` y su enlace en el menú de navegación en `public/index.html`.
+  * Eliminado el módulo cliente `public/js/modules/reviews.js`.
+  * Removida la importación e inicialización de `initReviews` en `public/js/main.js`.
+  * Removida la observación de `'opiniones'` del scrollspy en `public/js/modules/navigation.js`.
+  * Eliminados más de 300 líneas de estilos CSS dedicados al carrusel y tarjetas de reseñas en `public/css/styles.css`.
+  * Eliminada la ruta `/api/reviews` y la importación de funciones en `server.js`.
+  * Eliminado el directorio backend `netlify/functions/` y las reglas de redirección en `netlify.toml`.
+* **Depuración de Elementos Hardcodeados y Credenciales:**
+  * Removidas credenciales y Place IDs de Google Places en `.env` y `.env.example`.
+  * Eliminado el año estático `2026` dentro del HTML de `#footerYear` (generado ahora 100% dinámicamente por JavaScript).
+  * Depurado el CSP en `server.js` y `netlify.toml`, retirando el dominio externo `lh3.googleusercontent.com` de `img-src` al no ser necesario para avatares de reseñas.
 
 ### [2026-10-08] - Corrección integral de visibilidad, accesibilidad y endurecimiento de seguridad
 * **Inventario:**
@@ -47,12 +55,9 @@
   * Cambiado `.svg-defs` a posicionamiento fuera de pantalla (`overflow: hidden; pointer-events: none`) para permitir que `<use>` calcule bounding boxes en Chromium y Safari.
   * Agregado `render()` obligatorio en la inicialización de `catalog.js`.
 * **Mapa:**
-  * Corregida URL corrupta de embed de Google Maps por la URL oficial del comercio `SanMiguel` en Tijuana.
+  * Corregida URL de embed de Google Maps por la URL oficial del comercio `SanMiguel` en Tijuana.
   * Habilitado `pointer-events: auto` en el iframe del mapa para permitir interacción fluida en móviles.
   * Añadido `https://maps.google.com` a la directiva `frame-src` del CSP en `server.js` y `netlify.toml`.
-* **Opiniones:**
-  * Rediseñado el módulo `reviews.js` para renderizar de inmediato 5 opiniones locales, evitando que el carrusel se oculte cuando la API de Google retorne 403 o no tenga reseñas aún.
-  * Conectado a consulta en segundo plano no bloqueante para reemplazar testimonios automáticamente cuando la API de Google Places esté activa.
 * **Navegación y Header:**
   * Ajustada la lógica de scroll en `navigation.js` para asegurar que al llegar al pie de página (`is-bottom`), el header reaparezca y permita usar el botón de contacto de WhatsApp del navbar.
 * **Seguridad de Servidor:**

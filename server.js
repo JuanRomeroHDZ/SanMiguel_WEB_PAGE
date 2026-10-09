@@ -2,7 +2,6 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { handler as reviewsHandler } from './netlify/functions/reviews.mjs';
 
 // Carga de variables de entorno locales
 try {
@@ -41,7 +40,7 @@ function setSecurityHeaders(res) {
         "script-src 'self'",
         "style-src 'self' https://fonts.googleapis.com",
         "font-src 'self' https://fonts.gstatic.com data:",
-        "img-src 'self' data: https://lh3.googleusercontent.com",
+        "img-src 'self' data:",
         "frame-src https://www.google.com https://maps.google.com",
         "connect-src 'self'",
         "object-src 'none'",
@@ -97,26 +96,6 @@ const server = http.createServer(async (req, res) => {
     }
 
     const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-
-    // Delegacion directa a la funcion serverless para evitar duplicidad de backend
-    if (parsedUrl.pathname === '/api/reviews') {
-        try {
-            const event = {
-                httpMethod: req.method,
-                headers: req.headers,
-                path: parsedUrl.pathname
-            };
-            const result = await reviewsHandler(event);
-
-            const headers = result.headers || { 'Content-Type': 'application/json' };
-            res.writeHead(result.statusCode || 200, headers);
-            res.end(result.body || '');
-        } catch (_) {
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error interno' }));
-        }
-        return;
-    }
 
     serveStaticFile(parsedUrl.pathname, res);
 });

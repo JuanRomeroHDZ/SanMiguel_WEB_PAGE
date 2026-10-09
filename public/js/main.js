@@ -6,13 +6,11 @@
 import { initAnalyticsWithConsent } from './modules/analytics.js';
 import { initSchedule } from './modules/schedule.js';
 import { initCatalog } from './modules/catalog.js';
-import { initReviews } from './modules/reviews.js';
 import { initNavigation } from './modules/navigation.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initAnalyticsWithConsent();
     initSchedule();
     initCatalog();
-    initReviews();
     initNavigation();
 });

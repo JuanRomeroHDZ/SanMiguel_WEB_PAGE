@@ -159,7 +159,7 @@ export function initNavigation() {
         });
     }, { rootMargin: '-40% 0px -55% 0px' });
 
-    ['catalogo', 'opiniones', 'ubicacion'].forEach(id => {
+    ['catalogo', 'ubicacion'].forEach(id => {
         const sec = document.getElementById(id);
         if (sec) spyObserver.observe(sec);
     });

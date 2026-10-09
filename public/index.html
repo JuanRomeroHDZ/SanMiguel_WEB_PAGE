@@ -132,7 +132,6 @@
 
         <ul class="nav-links" id="primaryNavLinks">
             <li><a href="#catalogo" class="standard-link" data-section="catalogo">Catálogo</a></li>
-            <li><a href="#opiniones" class="standard-link" data-section="opiniones">Opiniones</a></li>
             <li><a href="#ubicacion" class="standard-link" data-section="ubicacion">Ubicación</a></li>
             <li>
                 <div class="nav-contact-wrapper">
@@ -215,63 +214,6 @@
         <div class="bento-grid" id="bentoGrid"></div>
     </main>
 
-    <!-- Sección de Reseñas de Google Places (Carrusel Automático) -->
-    <section class="reviews-section" id="opiniones" aria-label="Opiniones de clientes">
-        <div class="container">
-            <div class="reviews-header">
-                <div class="reviews-title-group">
-                    <h2>Opiniones de<br>Nuestros Clientes.</h2>
-                    <p>Lo que dicen nuestros vecinos de Tienda San Miguel en Google Maps.</p>
-                </div>
-                <div class="google-rating-summary" id="googleRatingSummary" aria-label="Calificación promedio de clientes">
-                    <div class="rating-score" id="ratingScoreVal">5.0</div>
-                    <div class="rating-stars-wrapper">
-                        <div class="stars-row" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><use href="#svg-star"/></svg>
-                            <svg viewBox="0 0 24 24"><use href="#svg-star"/></svg>
-                            <svg viewBox="0 0 24 24"><use href="#svg-star"/></svg>
-                            <svg viewBox="0 0 24 24"><use href="#svg-star"/></svg>
-                            <svg viewBox="0 0 24 24"><use href="#svg-star"/></svg>
-                        </div>
-                        <span class="rating-count-text" id="ratingCountText">Opiniones de clientes</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Estructura del Carrusel Accesible (WCAG 2.2.2 & 4.1.2) -->
-            <div class="reviews-carousel-wrapper" id="reviewsCarouselWrapper">
-                <div class="reviews-carousel-viewport" id="reviewsCarouselViewport" aria-roledescription="carousel" role="region" aria-label="Carrusel de testimonios">
-                    <div class="reviews-carousel-track" id="reviewsGrid">
-                        <!-- Las reseñas se inyectan mediante nodos DOM seguros -->
-                    </div>
-                </div>
-
-                <!-- Controles Compactos y Accesibles -->
-                <div class="reviews-controls" id="reviewsControls">
-                    <button type="button" class="btn-ctrl-compact" id="carouselPrevBtn" aria-label="Opinión anterior">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-                    </button>
-                    <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Navegación de reseñas"></div>
-                    <span class="carousel-counter" id="carouselCounter" aria-live="polite"></span>
-                    <button type="button" class="btn-ctrl-compact" id="carouselNextBtn" aria-label="Siguiente opinión">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                    </button>
-                    <!-- Botón de Pausa/Reanudación WCAG 2.2.2 -->
-                    <button type="button" class="btn-ctrl-compact" id="carouselPlayPauseBtn" aria-label="Pausar carrusel automático" title="Pausar carrusel automático">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="reviews-footer-cta">
-                <a href="https://www.google.com/maps/place/?q=place_id:ChIJL1WmDQA_2YARRj0C3nEAkW4" target="_blank" rel="noopener noreferrer" class="btn-outline">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><use href="#svg-pin"/></svg>
-                    Ver y dejar opiniones en Google Maps
-                </a>
-            </div>
-        </div>
-    </section>
-
     <!-- Sección de Ubicación y Mapa -->
     <section class="location-section" id="ubicacion">
         <div class="loc-info">
@@ -348,7 +290,7 @@
                 by JR
             </span>
 
-            <span>&copy; <span id="footerYear">2026</span> Todos los derechos reservados.</span>
+            <span>&copy; <span id="footerYear"></span> Todos los derechos reservados.</span>
         </div>
     </footer>
 
