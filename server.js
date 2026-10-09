@@ -52,11 +52,21 @@ function setSecurityHeaders(res) {
 }
 
 function serveStaticFile(reqPath, res) {
-    const safePath = path.normalize(reqPath).replace(/^(\.\.[/\\])+/, '');
-    const filePath = path.join(PUBLIC_DIR, safePath === '/' ? 'index.html' : safePath);
+    let decodedPath;
+    try {
+        decodedPath = decodeURIComponent(reqPath);
+    } catch (_) {
+        res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Petición incorrecta');
+        return;
+    }
+
+    const safePath = path.normalize(decodedPath).replace(/^(\.\.[/\\])+/, '');
+    const normalizedRelative = safePath === '/' ? '/index.html' : safePath;
+    const filePath = path.resolve(PUBLIC_DIR, '.' + normalizedRelative);
 
     if (!filePath.startsWith(PUBLIC_DIR)) {
-        res.writeHead(403);
+        res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
         res.end('Acceso denegado');
         return;
     }
@@ -124,3 +134,6 @@ server.on('error', (err) => {
 server.listen(PORT, HOST, () => {
     console.log(`Servidor local activo en http://${HOST}:${PORT}`);
 });
+
+export { server };
+

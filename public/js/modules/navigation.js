@@ -83,6 +83,7 @@ export function initNavigation() {
 
         if (isNearBottom) {
             document.body.classList.add('is-bottom');
+            document.body.classList.remove('header-hidden');
             if (navContactBtn) navContactBtn.setAttribute('aria-hidden', 'false');
         } else {
             const footer = document.querySelector('footer');
@@ -95,6 +96,10 @@ export function initNavigation() {
             if (!footerVisible) {
                 document.body.classList.remove('is-bottom');
                 if (navContactBtn) navContactBtn.setAttribute('aria-hidden', 'true');
+            } else {
+                document.body.classList.add('is-bottom');
+                document.body.classList.remove('header-hidden');
+                if (navContactBtn) navContactBtn.setAttribute('aria-hidden', 'false');
             }
         }
         ticking = false;
@@ -113,6 +118,7 @@ export function initNavigation() {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     document.body.classList.add('is-bottom');
+                    document.body.classList.remove('header-hidden');
                     if (navContactBtn) navContactBtn.setAttribute('aria-hidden', 'false');
                 } else {
                     handleScroll();

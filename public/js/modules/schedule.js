@@ -20,8 +20,10 @@ export function initSchedule() {
             });
 
             const parts = formatter.formatToParts(new Date());
-            const hour = parseInt(parts.find(p => p.type === 'hour')?.value, 10);
-            const minute = parseInt(parts.find(p => p.type === 'minute')?.value, 10);
+            const rawHour = parseInt(parts.find(p => p.type === 'hour')?.value, 10);
+            const hour = Number.isNaN(rawHour) ? 0 : (rawHour % 24);
+            const rawMinute = parseInt(parts.find(p => p.type === 'minute')?.value, 10);
+            const minute = Number.isNaN(rawMinute) ? 0 : rawMinute;
             const currentMinsInTijuana = (hour * 60) + minute;
 
             // 7:00 AM = 420 minutos, 9:00 PM = 1260 minutos
