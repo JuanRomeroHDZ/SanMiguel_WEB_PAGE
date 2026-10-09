@@ -35,6 +35,14 @@
 
 ## 2. Historial de Modificaciones
 
+### [2026-10-08] - Incorporación de Google Analytics (GA4) y verificación de código postal
+* **Google Analytics (G-QFVF820EBY):**
+  * Implementada carga dinámica y asíncrona de `gtag.js` desde `public/js/modules/analytics.js` sin insertar scripts inline, preservando CSP estricto (`script-src 'self' https://www.googletagmanager.com` sin `'unsafe-inline'`).
+  * Integrada verificación de consentimiento previo con banner accesible (`.consent-banner`) que almacena la decisión en `localStorage`. Al aceptar, se dispara la carga de GA4 de inmediato.
+  * Actualizadas las directivas CSP en `server.js` y `netlify.toml` (`script-src`, `img-src` y `connect-src`) para permitir los endpoints oficiales de Google Tag Manager y Google Analytics.
+* **Código Postal:**
+  * Verificado y confirmado el código postal correcto `22330` (Terrazas del Valle, Tijuana) en Schema JSON-LD, sección de ubicación y pie de página de `public/index.html`.
+
 ### [2026-10-08] - Eliminación total de reseñas y depuración de datos hardcodeados
 * **Eliminación de Reseñas / Opiniones:**
   * Eliminada la sección HTML `#opiniones` y su enlace en el menú de navegación en `public/index.html`.

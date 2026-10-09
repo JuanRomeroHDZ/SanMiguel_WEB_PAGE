@@ -37,12 +37,12 @@ function setSecurityHeaders(res) {
     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
     res.setHeader('Content-Security-Policy', [
         "default-src 'self'",
-        "script-src 'self'",
+        "script-src 'self' https://www.googletagmanager.com",
         "style-src 'self' https://fonts.googleapis.com",
         "font-src 'self' https://fonts.gstatic.com data:",
-        "img-src 'self' data:",
+        "img-src 'self' data: https://www.google-analytics.com https://*.google-analytics.com https://*.googletagmanager.com",
         "frame-src https://www.google.com https://maps.google.com",
-        "connect-src 'self'",
+        "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
         "object-src 'none'",
         "base-uri 'self'",
         "form-action 'self'",
