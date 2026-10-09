@@ -29,6 +29,10 @@ const MIME_TYPES = {
 };
 
 const PUBLIC_DIR = path.join(__dirname, 'public');
+let REAL_PUBLIC_DIR = PUBLIC_DIR;
+try {
+    REAL_PUBLIC_DIR = fs.realpathSync(PUBLIC_DIR);
+} catch (_) {}
 
 function setSecurityHeaders(res) {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -50,7 +54,7 @@ function setSecurityHeaders(res) {
     ].join('; '));
 }
 
-function serveStaticFile(reqPath, res) {
+function serveStaticFile(reqPath, res, method = 'GET') {
     let decodedPath;
     try {
         decodedPath = decodeURIComponent(reqPath);
@@ -70,19 +74,49 @@ function serveStaticFile(reqPath, res) {
         return;
     }
 
-    fs.stat(filePath, (err, stats) => {
-        if (err || !stats.isFile()) {
-            res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-            res.end('Recurso no encontrado');
+    fs.realpath(filePath, (realErr, realFilePath) => {
+        if (realErr) {
+            if (realErr.code === 'ENOENT') {
+                res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+                res.end('Recurso no encontrado');
+            } else {
+                res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+                res.end('Acceso denegado');
+            }
             return;
         }
 
-        const ext = path.extname(filePath).toLowerCase();
-        const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+        // Proteger contra symlinks que apunten fuera de PUBLIC_DIR
+        if (!realFilePath.startsWith(REAL_PUBLIC_DIR)) {
+            res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+            res.end('Acceso denegado');
+            return;
+        }
 
-        res.writeHead(200, { 'Content-Type': contentType });
-        const stream = fs.createReadStream(filePath);
-        stream.pipe(res);
+        fs.stat(realFilePath, (err, stats) => {
+            if (err || !stats.isFile()) {
+                res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+                res.end('Recurso no encontrado');
+                return;
+            }
+
+            const ext = path.extname(realFilePath).toLowerCase();
+            const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+
+            res.writeHead(200, { 
+                'Content-Type': contentType,
+                'Content-Length': stats.size 
+            });
+
+            // RFC 9110: Respuestas HEAD no deben enviar cuerpo
+            if (method === 'HEAD') {
+                res.end();
+                return;
+            }
+
+            const stream = fs.createReadStream(realFilePath);
+            stream.pipe(res);
+        });
     });
 }
 
@@ -97,7 +131,7 @@ const server = http.createServer(async (req, res) => {
 
     const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
 
-    serveStaticFile(parsedUrl.pathname, res);
+    serveStaticFile(parsedUrl.pathname, res, req.method);
 });
 
 server.on('error', (err) => {

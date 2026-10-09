@@ -161,9 +161,6 @@ export function initCatalog() {
         let visibleCount = 0;
 
         cards.forEach(card => {
-            card.classList.remove('pop-in');
-            card.style.animation = 'none';
-
             const matchFilter = (currentFilter === 'all' || card.getAttribute('data-category') === currentFilter);
             const cardText = (card.textContent || '').toLowerCase();
             const matchSearch = cardText.includes(currentSearch);
@@ -178,10 +175,6 @@ export function initCatalog() {
                 } else {
                     card.classList.add(card.dataset.layout);
                 }
-
-                void card.offsetWidth;
-                card.classList.add('pop-in');
-                card.style.animation = '';
             } else {
                 card.style.display = 'none';
             }

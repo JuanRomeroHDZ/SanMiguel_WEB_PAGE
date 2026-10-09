@@ -7,6 +7,21 @@ export function initNavigation() {
     const navElement = document.querySelector('nav');
     const mobileToggle = document.getElementById('mobileNavToggle');
     const navLinks = document.getElementById('primaryNavLinks');
+    const navContactBtn = document.querySelector('.nav-contact-btn');
+
+    const setContactButtonState = (visible) => {
+        if (!navContactBtn) return;
+        if (visible) {
+            navContactBtn.setAttribute('tabindex', '0');
+            navContactBtn.setAttribute('aria-hidden', 'false');
+        } else {
+            navContactBtn.setAttribute('tabindex', '-1');
+            navContactBtn.setAttribute('aria-hidden', 'true');
+        }
+    };
+
+    // Estado inicial: inaccesible por teclado mientras esté oculto con width: 0
+    setContactButtonState(false);
 
     if (mobileToggle && navElement) {
         const toggleMenu = (open) => {
@@ -16,6 +31,12 @@ export function initNavigation() {
             navElement.classList.toggle('nav-open', shouldOpen);
             mobileToggle.setAttribute('aria-expanded', String(shouldOpen));
             mobileToggle.setAttribute('aria-label', shouldOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación');
+
+            if (shouldOpen) {
+                setContactButtonState(true);
+            } else {
+                setContactButtonState(document.body.classList.contains('is-bottom'));
+            }
         };
 
         mobileToggle.addEventListener('click', () => toggleMenu());
@@ -54,7 +75,6 @@ export function initNavigation() {
     }
 
     // 3. CAMBIO DE BOTON DE WHATSAPP AL LLEGAR AL FINAL (BOTTOM SWAP) Y OCULTAR/MOSTRAR HEADER
-    const navContactBtn = document.querySelector('.nav-contact-btn');
     let ticking = false;
     let lastScrollY = window.scrollY;
 
@@ -84,7 +104,7 @@ export function initNavigation() {
         if (isNearBottom) {
             document.body.classList.add('is-bottom');
             document.body.classList.remove('header-hidden');
-            if (navContactBtn) navContactBtn.setAttribute('aria-hidden', 'false');
+            setContactButtonState(true);
         } else {
             const footer = document.querySelector('footer');
             let footerVisible = false;
@@ -95,11 +115,11 @@ export function initNavigation() {
 
             if (!footerVisible) {
                 document.body.classList.remove('is-bottom');
-                if (navContactBtn) navContactBtn.setAttribute('aria-hidden', 'true');
+                setContactButtonState(navElement && navElement.classList.contains('nav-open'));
             } else {
                 document.body.classList.add('is-bottom');
                 document.body.classList.remove('header-hidden');
-                if (navContactBtn) navContactBtn.setAttribute('aria-hidden', 'false');
+                setContactButtonState(true);
             }
         }
         ticking = false;
@@ -119,7 +139,7 @@ export function initNavigation() {
                 if (entry.isIntersecting) {
                     document.body.classList.add('is-bottom');
                     document.body.classList.remove('header-hidden');
-                    if (navContactBtn) navContactBtn.setAttribute('aria-hidden', 'false');
+                    setContactButtonState(true);
                 } else {
                     handleScroll();
                 }
@@ -167,7 +187,6 @@ export function initNavigation() {
     // 7. EFECTO ONDA EN BOTON FLOTANTE WHATSAPP (FAB)
     const fab = document.getElementById('whatsappFab');
     if (fab) {
-        fab.addEventListener('touchstart', () => {}, { passive: true });
         fab.addEventListener('mousedown', function(e) {
             const rect = this.getBoundingClientRect();
             const x = e.clientX - rect.left;

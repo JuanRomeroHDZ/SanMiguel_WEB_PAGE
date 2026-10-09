@@ -1,6 +1,6 @@
 /**
- * main.js - Punto de entrada de la aplicacion
- * Orquesta los modulos atomicos de interfaz, catalogo, resenas, privacidad y horario
+ * main.js - Punto de entrada de la aplicación
+ * Orquesta los módulos atómicos de navegación, catálogo, horario y analítica con privacidad
  */
 
 import { initAnalyticsWithConsent } from './modules/analytics.js';

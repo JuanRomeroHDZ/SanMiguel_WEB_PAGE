@@ -35,6 +35,25 @@
 
 ## 2. Historial de Modificaciones
 
+### [2026-10-08] - Correcciones de auditoría y pulido de estándares (Accesibilidad, RFC 9110, Rendimiento, Assets)
+* **Accesibilidad Web (WCAG 2.1 AA):**
+  * **Sincronización de Foco y `aria-hidden` (WCAG 4.1.2):** En `public/js/modules/navigation.js`, se corrigió el botón "Contacto" del navbar; ahora sincroniza dinámicamente `tabindex="-1"` cuando está oculto visualmente (`aria-hidden="true"`), y se restaura a `tabindex="0"` cuando se expande el menú móvil o cuando la página llega al fondo.
+  * **Indicador de Foco Global (WCAG 2.4.7):** Añadida regla `:focus-visible` global en `public/css/styles.css` con contorno de alto contraste (dorado `#D4AF37` y vino `#7A1022`) para garantizar navegación completa y clara por teclado en todos los elementos interactivos.
+* **Optimización CSS & Mobile-First:**
+  * En `public/css/styles.css`, se eliminaron los parches con `!important` en la barra superior (`.top-bar`) y en el contenedor/botón de contacto móvil (`.nav-contact-wrapper`, `.nav-contact-btn`), reemplazándolos con reglas limpias de cascada y control de `visibility: hidden` / `visible`.
+* **Assets & Redes Sociales (SEO/Open Graph):**
+  * Generada la imagen faltante `public/og-image.jpg` con dimensiones estándar Open Graph de 1200×630 px, diseñada con la identidad visual de la tienda (paleta vino, dorado y carbón), información de contacto y optimizada para previsualizaciones en WhatsApp, Facebook y Twitter Cards.
+* **Seguridad y Cumplimiento RFC en Servidor (`server.js`):**
+  * **Cumplimiento RFC 9110 (HEAD):** Las peticiones `HEAD` ahora responden con las cabeceras HTTP correctas (`Content-Type`, `Content-Length`) y finalizan con `res.end()` sin transferir el cuerpo del archivo por stream.
+  * **Prevención de Symlink Traversal:** Se incorporó la resolución de rutas reales mediante `fs.realpath` para asegurar que ningún enlace simbólico o alias pueda escapar del directorio raíz público (`public/`).
+* **Rendimiento y Buenas Prácticas DOM (`catalog.js`):**
+  * Removida la instrucción `void card.offsetWidth` dentro del ciclo `cards.forEach`, eliminando el layout thrashing (cálculo de reflujo sincrónico forzado) al filtrar o escribir en el buscador.
+* **Consistencia de Entrada de Usuario (`index.html`):**
+  * Añadido el atributo `maxlength="50"` al campo `<input type="search" id="searchInput">`, unificando la restricción de longitud en la interfaz con la validación interna del cliente.
+* **Higiene de Código y Documentación:**
+  * Removido el evento vacío `touchstart` del botón flotante (FAB) en `navigation.js`.
+  * Actualizado el docstring principal de `public/js/main.js` para reflejar con precisión los módulos activos del sistema (navegación, catálogo, horario y analítica).
+
 ### [2026-10-08] - Incorporación de Google Analytics (GA4) y verificación de código postal
 * **Google Analytics (G-QFVF820EBY):**
   * Implementada carga dinámica y asíncrona de `gtag.js` desde `public/js/modules/analytics.js` sin insertar scripts inline, preservando CSP estricto (`script-src 'self' https://www.googletagmanager.com` sin `'unsafe-inline'`).
