@@ -12,7 +12,8 @@ export const BENTO_PRODUCTS = [
         layout: 'item-large',
         bgClass: 'bg-wine',
         icon: '#svg-bread',
-        delay: ''
+        delay: '',
+        image: 'PanTortillas.jpeg'
     },
     {
         id: 'recargas',
@@ -22,7 +23,8 @@ export const BENTO_PRODUCTS = [
         layout: 'item-normal',
         bgClass: 'bg-white',
         icon: '#svg-phone',
-        delay: 'delay-1'
+        delay: 'delay-1',
+        image: 'Recargas.jpeg'
     },
     {
         id: 'congelados',
@@ -32,7 +34,8 @@ export const BENTO_PRODUCTS = [
         layout: 'item-normal',
         bgClass: 'bg-dark',
         icon: '#svg-ice',
-        delay: 'delay-2'
+        delay: 'delay-2',
+        image: 'Congelados.jpeg'
     },
     {
         id: 'bebidas',
@@ -42,7 +45,8 @@ export const BENTO_PRODUCTS = [
         layout: 'item-tall',
         bgClass: 'bg-soft',
         icon: '#svg-bottle',
-        delay: 'delay-1'
+        delay: 'delay-1',
+        image: 'BebidasFrescas.jpeg'
     },
     {
         id: 'abarrotes',
@@ -52,7 +56,8 @@ export const BENTO_PRODUCTS = [
         layout: 'item-wide',
         bgClass: 'bg-dark',
         icon: '#svg-can',
-        delay: 'delay-2'
+        delay: 'delay-2',
+        image: 'AbarrotesEspecias.jpeg'
     },
     {
         id: 'farmacia',
@@ -62,7 +67,8 @@ export const BENTO_PRODUCTS = [
         layout: 'item-normal',
         bgClass: 'bg-white',
         icon: '#svg-pills',
-        delay: 'delay-3'
+        delay: 'delay-3',
+        image: 'FarmaciaBasica.jpeg'
     },
     {
         id: 'botanas',
@@ -82,7 +88,8 @@ export const BENTO_PRODUCTS = [
         layout: 'item-wide',
         bgClass: 'bg-soft',
         icon: '#svg-tools',
-        delay: 'delay-3'
+        delay: 'delay-3',
+        image: 'FerreteriaMascotas.jpeg'
     },
     {
         id: 'desechables',
@@ -92,7 +99,8 @@ export const BENTO_PRODUCTS = [
         layout: 'item-normal',
         bgClass: 'bg-white',
         icon: '#svg-clean',
-        delay: 'delay-4'
+        delay: 'delay-4',
+        image: 'Desechables.jpeg'
     }
 ];
 
@@ -114,9 +122,23 @@ function createSvgUseNode(symbolId, width, height, className) {
 function createBentoCard(item) {
     const card = document.createElement('article');
     const delayClass = item.delay ? ` ${item.delay}` : '';
-    card.className = `bento-item ${item.layout} pop-in ${item.bgClass}${delayClass}`;
+    const hasImageClass = item.image ? ' has-bg-image' : '';
+    card.className = `bento-item ${item.layout} pop-in ${item.bgClass}${hasImageClass}${delayClass}`;
     card.dataset.category = item.category;
     card.dataset.layout = item.layout;
+
+    if (item.image) {
+        const bgImg = document.createElement('div');
+        bgImg.className = 'bento-bg-img';
+        bgImg.style.backgroundImage = `url('/images/${item.image}')`;
+        bgImg.setAttribute('aria-hidden', 'true');
+        card.appendChild(bgImg);
+
+        const overlay = document.createElement('div');
+        overlay.className = 'bento-bg-overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+        card.appendChild(overlay);
+    }
 
     const icon = createSvgUseNode(item.icon, 42, 42, 'bento-icon');
     const watermark = createSvgUseNode(item.icon, 160, 160, 'bento-watermark');

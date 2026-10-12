@@ -469,13 +469,49 @@ body.is-bottom .nav-contact-wrapper { width: 155px; opacity: 1; visibility: visi
     .bento-item.bg-wine:hover, .bento-item.bg-dark:hover { border-color: var(--clr-gold); }
     .bento-item:hover .bento-watermark { transform: scale(1.15) rotate(-10deg); }
     .bento-item:hover .bento-icon { transform: translateY(-4px) rotate(5deg) scale(1.05); }
+    .bento-item:hover .bento-bg-img { transform: scale(1.05); }
 }
 
-.bento-watermark { position: absolute; top: -15%; right: -10%; width: 160px; height: 160px; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; }
-.bento-icon { width: 42px; height: 42px; margin-bottom: auto; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+/* Capas de fondo con imagen y atenuacion del 15% */
+.bento-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.85;
+    z-index: 0;
+    pointer-events: none;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-.bento-item h3 { font-size: 1.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; z-index: 2; }
-.bento-item p { font-size: 0.95rem; z-index: 2; font-weight: 400; opacity: 0.95; }
+.bento-bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bg-wine .bento-bg-overlay,
+.bg-dark .bento-bg-overlay {
+    background: linear-gradient(to top, rgba(10, 15, 26, 0.72) 0%, rgba(10, 15, 26, 0.3) 50%, rgba(10, 15, 26, 0.15) 100%);
+}
+
+.bg-white .bento-bg-overlay,
+.bg-soft .bento-bg-overlay {
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.48) 50%, rgba(255, 255, 255, 0.15) 100%);
+}
+
+.bento-watermark { position: absolute; top: -15%; right: -10%; width: 160px; height: 160px; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; z-index: 2; }
+.bento-icon { width: 42px; height: 42px; margin-bottom: auto; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; z-index: 2; }
+
+.bento-item h3 { font-size: 1.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; position: relative; z-index: 2; }
+.bento-item p { font-size: 0.95rem; position: relative; z-index: 2; font-weight: 400; opacity: 0.95; }
 
 .bg-white h3, .bg-white p { color: var(--clr-dark); }
 .bg-white .bento-icon, .bg-white .bento-watermark { fill: var(--clr-wine); }
@@ -729,6 +765,7 @@ body.is-bottom .fab { transform: scale(0.5); opacity: 0; pointer-events: none; }
         animation: none !important;
     }
     .bento-item,
+    .bento-bg-img,
     nav,
     .top-bar,
     .fab {

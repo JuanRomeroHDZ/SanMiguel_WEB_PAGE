@@ -22,6 +22,7 @@
 | `index.html` | `/public/index.html` | Estructura semántica principal, metadatos SEO / Open Graph, Schema.org LocalBusiness, repositorio SVG (`<symbol>`), Bento Grid y mapa de ubicación. Sin elementos o años hardcodeados. |
 | `styles.css` | `/public/css/styles.css` | Estilos visuales con variables CSS, layout Bento Grid responsivo, animaciones, reglas de accesibilidad (contraste 4.5:1+, áreas táctiles de 44px+) y soporte para `prefers-reduced-motion`. |
 | `main.js` | `/public/js/main.js` | Orquestador de inicio en cliente; importa e inicializa los módulos al cargar `DOMContentLoaded`. |
+| `images/` | `/public/images/` | Fotografías de fondo para las tarjetas del catálogo Bento Grid (`.jpeg`), servidas de forma estática y segura. |
 
 ### Módulos JavaScript (`public/js/modules/`)
 | Módulo | Ubicación | Responsabilidad principal |
@@ -34,6 +35,18 @@
 ---
 
 ## 2. Historial de Modificaciones
+
+### [2026-10-11] - Integración de fotografías de fondo en tarjetas del Bento Grid
+* **Estructura y Assets (`public/images/`):**
+  * Organizadas las 8 fotografías provistas (`PanTortillas.jpeg`, `Recargas.jpeg`, `Congelados.jpeg`, `BebidasFrescas.jpeg`, `AbarrotesEspecias.jpeg`, `FarmaciaBasica.jpeg`, `FerreteriaMascotas.jpeg`, `Desechables.jpeg`) dentro de `/public/images/` para habilitar su distribución estática en el servidor y en Netlify.
+  * Añadida la extensión `.jpeg` a `MIME_TYPES` en `server.js` para asegurar la cabecera `image/jpeg`.
+* **Catálogo Atómico (`public/js/modules/catalog.js`):**
+  * Asignada la propiedad `image` correspondiente a los productos en `BENTO_PRODUCTS` (dejando "Botanas & Dulces" con su estilo base al no tener imagen).
+  * Renderizadas las capas `.bento-bg-img` y `.bento-bg-overlay` con `aria-hidden="true"`, asegurando que el contenido existente (iconos, marcas de agua, títulos `h3` y descripciones `p`) permanezca al frente con `z-index: 2`.
+* **Estilos y Atenuación de Brillo (`public/css/styles.css`):**
+  * Fondo visible al 85% de opacidad (`.bento-bg-img`) para destacar la fotografía sin opacar la tarjeta.
+  * Incorporada capa `.bento-bg-overlay` con gradiente de atenuación del 15% (oscuro en fondos vino/negros y claro en fondos blancos/suaves) para mitigar reflejos y garantizar la legibilidad y contraste WCAG AA del texto.
+  * Agregado micro-zoom interactivo en `:hover` (`scale(1.05)`) y respetada la regla de `prefers-reduced-motion`.
 
 ### [2026-10-08] - Correcciones de auditoría y pulido de estándares (Accesibilidad, RFC 9110, Rendimiento, Assets)
 * **Accesibilidad Web (WCAG 2.1 AA):**

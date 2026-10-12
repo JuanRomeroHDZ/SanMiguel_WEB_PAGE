@@ -25,6 +25,7 @@ const MIME_TYPES = {
     '.svg': 'image/svg+xml',
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
     '.ico': 'image/x-icon'
 };
 
