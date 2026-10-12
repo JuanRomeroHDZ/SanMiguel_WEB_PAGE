@@ -78,7 +78,8 @@ export const BENTO_PRODUCTS = [
         layout: 'item-normal',
         bgClass: 'bg-wine',
         icon: '#svg-candy',
-        delay: 'delay-2'
+        delay: 'delay-2',
+        image: 'BotanasDulces.jpeg'
     },
     {
         id: 'ferreteria',

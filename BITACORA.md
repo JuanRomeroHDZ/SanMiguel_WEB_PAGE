@@ -36,6 +36,15 @@
 
 ## 2. Historial de Modificaciones
 
+### [2026-10-12] - Unificación a tipografía blanca, eliminación de veladura clara e integración de foto para Botanas & Dulces
+* **Integración de `BotanasDulces.jpeg`:**
+  * Asignada la nueva fotografía provista en `/public/images/BotanasDulces.jpeg` a la tarjeta `botanas` en `BENTO_PRODUCTS` (`catalog.js`), completando el 100% de las 9 tarjetas del catálogo con imagen de fondo.
+* **Ajuste de Capa y Tipografía Blanca (`public/css/styles.css`):**
+  * Eliminado el gradiente blanco lechoso que generaba aspecto descolorido en tarjetas previamente claras.
+  * Unificado el overlay `.bento-bg-overlay` con un degradado oscuro inferior (`rgba(10, 15, 26, 0.85)` a `0.15`) en todas las tarjetas para dar profundidad a las fotografías.
+  * Cambiado todo el texto (`h3` y `p`) a color blanco (`#fff`) con sutil sombra (`text-shadow`) para máxima nitidez y legibilidad.
+  * Establecido color blanco/dorado con sombra para los iconos superiores (`.bento-icon`) y marcas de agua.
+
 ### [2026-10-11] - Integración de fotografías de fondo en tarjetas del Bento Grid
 * **Estructura y Assets (`public/images/`):**
   * Organizadas las 8 fotografías provistas (`PanTortillas.jpeg`, `Recargas.jpeg`, `Congelados.jpeg`, `BebidasFrescas.jpeg`, `AbarrotesEspecias.jpeg`, `FarmaciaBasica.jpeg`, `FerreteriaMascotas.jpeg`, `Desechables.jpeg`) dentro de `/public/images/` para habilitar su distribución estática en el servidor y en Netlify.
