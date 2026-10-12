@@ -19,10 +19,12 @@
 ### Frontend Estático (`public/`)
 | Archivo | Ubicación | Responsabilidad principal |
 | :--- | :--- | :--- |
-| `index.html` | `/public/index.html` | Estructura semántica principal, metadatos SEO / Open Graph, Schema.org LocalBusiness, repositorio SVG (`<symbol>`), Bento Grid y mapa de ubicación. Sin elementos o años hardcodeados. |
+| `index.html` | `/public/index.html` | Estructura semántica principal, metadatos SEO / Open Graph (`https://romeros.xyz/`), Schema.org LocalBusiness, repositorio SVG (`<symbol>`), Bento Grid y mapa de ubicación. Sin elementos o años hardcodeados. |
 | `styles.css` | `/public/css/styles.css` | Estilos visuales con variables CSS, layout Bento Grid responsivo, animaciones, reglas de accesibilidad (contraste 4.5:1+, áreas táctiles de 44px+) y soporte para `prefers-reduced-motion`. |
 | `main.js` | `/public/js/main.js` | Orquestador de inicio en cliente; importa e inicializa los módulos al cargar `DOMContentLoaded`. |
 | `images/` | `/public/images/` | Fotografías de fondo para las tarjetas del catálogo Bento Grid (`.jpeg`), servidas de forma estática y segura. |
+| `robots.txt` | `/public/robots.txt` | Directivas de indexación y rastreo para Googlebot y buscadores, enlazando al sitemap. |
+| `sitemap.xml` | `/public/sitemap.xml` | Mapa de sitio XML con URL canónica `https://romeros.xyz/` para Google Search Console. |
 
 ### Módulos JavaScript (`public/js/modules/`)
 | Módulo | Ubicación | Responsabilidad principal |
@@ -35,6 +37,19 @@
 ---
 
 ## 2. Historial de Modificaciones
+
+### [2026-10-12] - Configuración de dominio oficial romeros.xyz, auditoría SEO e indexación
+* **Dominio Oficial y Metadatos (`romeros.xyz`):**
+  * Actualizada la URL canónica (`<link rel="canonical">`), Open Graph (`og:url`, `og:image`), Twitter Cards (`twitter:image`) y Schema.org LocalBusiness JSON-LD (`url`, `image`) hacia `https://romeros.xyz/`.
+  * Optimizado el `<title>` y `<meta name="description">` para posicionamiento local en Google ("Abarrotes San Miguel en Tijuana, Terrazas del Valle").
+  * Regenerada `public/og-image.jpg` con el dominio `romeros.xyz` en la pastilla de pie de imagen.
+* **Archivos de Indexación SEO (`robots.txt` y `sitemap.xml`):**
+  * Creado `/public/robots.txt` permitiendo el rastreo de Googlebot y vinculando al sitemap oficial.
+  * Creado `/public/sitemap.xml` declarando la URL `https://romeros.xyz/` para su envío a Google Search Console.
+  * Agregados los tipos MIME `.xml` y `.txt` en `server.js`.
+* **Google Analytics (G-QFVF820EBY) y Privacidad:**
+  * Confirmada la compatibilidad total de GA4 tanto en GitHub Pages como en Netlify y dominio personalizado.
+  * Verificado el banner de consentimiento previo (`.consent-banner`) que informa al usuario sobre las cookies analíticas y sólo activa el rastreo tras la aceptación explícita.
 
 ### [2026-10-12] - Incorporación de Lácteos & Quesos y reordenamiento del Bento Grid (4x4 perfecto)
 * **Nueva Tarjeta Lácteos (`Lacteos.jpeg`):**
