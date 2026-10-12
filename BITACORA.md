@@ -36,6 +36,14 @@
 
 ## 2. Historial de Modificaciones
 
+### [2026-10-12] - Incorporación de Lácteos & Quesos y reordenamiento del Bento Grid (4x4 perfecto)
+* **Nueva Tarjeta Lácteos (`Lacteos.jpeg`):**
+  * Agregada la tarjeta `lacteos` a `BENTO_PRODUCTS` en `catalog.js` con su imagen correspondiente `/public/images/Lacteos.jpeg` y nuevo símbolo SVG `#svg-cheese` en `public/index.html`.
+* **Reorganización del Layout del Grid:**
+  * Se reubicó `Bebidas Frescas` (`item-tall`, 1x2) a la columna 4 (derecha), evitando que la orilla derecha quede compuesta únicamente de cuadros pequeños.
+  * Se posicionaron `Lácteos & Quesos` (1x1) y `Farmacia Básica` (1x1) en la columna 3 al lado de `Bebidas Frescas`.
+  * La cuadrícula de 4 columnas queda 100% compacta y equilibrada (10 tarjetas totales) sin huecos.
+
 ### [2026-10-12] - Unificación a tipografía blanca, eliminación de veladura clara e integración de foto para Botanas & Dulces
 * **Integración de `BotanasDulces.jpeg`:**
   * Asignada la nueva fotografía provista en `/public/images/BotanasDulces.jpeg` a la tarjeta `botanas` en `BENTO_PRODUCTS` (`catalog.js`), completando el 100% de las 9 tarjetas del catálogo con imagen de fondo.

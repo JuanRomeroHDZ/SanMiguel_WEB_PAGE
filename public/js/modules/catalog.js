@@ -38,6 +38,17 @@ export const BENTO_PRODUCTS = [
         image: 'Congelados.jpeg'
     },
     {
+        id: 'lacteos',
+        title: 'Lácteos & Quesos',
+        description: 'Queso fresco, Oaxaca, leche entera, crema, mantequilla y derivados.',
+        category: 'alimentos',
+        layout: 'item-normal',
+        bgClass: 'bg-soft',
+        icon: '#svg-cheese',
+        delay: 'delay-1',
+        image: 'Lacteos.jpeg'
+    },
+    {
         id: 'bebidas',
         title: 'Bebidas Frescas',
         description: 'Agua en garrafón, botellas, refrescos retornables y más.',
@@ -45,7 +56,7 @@ export const BENTO_PRODUCTS = [
         layout: 'item-tall',
         bgClass: 'bg-soft',
         icon: '#svg-bottle',
-        delay: 'delay-1',
+        delay: 'delay-2',
         image: 'BebidasFrescas.jpeg'
     },
     {
