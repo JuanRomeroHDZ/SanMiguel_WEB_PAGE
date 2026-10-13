@@ -31,11 +31,25 @@ const MIME_TYPES = {
     '.txt': 'text/plain; charset=utf-8'
 };
 
-const PUBLIC_DIR = path.join(__dirname, 'public');
-let REAL_PUBLIC_DIR = PUBLIC_DIR;
+const ROOT_DIR = __dirname;
+let REAL_ROOT_DIR = ROOT_DIR;
 try {
-    REAL_PUBLIC_DIR = fs.realpathSync(PUBLIC_DIR);
+    REAL_ROOT_DIR = fs.realpathSync(ROOT_DIR);
 } catch (_) {}
+
+// Archivos internos que jamás deben exponerse por HTTP
+const FORBIDDEN_FILES = new Set([
+    'server.js',
+    'package.json',
+    'package-lock.json',
+    'netlify.toml',
+    'bitacora.md',
+    'readme.md',
+    '.env',
+    '.env.example',
+    '.gitignore',
+    '.nojekyll'
+]);
 
 function setSecurityHeaders(res) {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -69,9 +83,20 @@ function serveStaticFile(reqPath, res, method = 'GET') {
 
     const safePath = path.normalize(decodedPath).replace(/^(\.\.[/\\])+/, '');
     const normalizedRelative = safePath === '/' ? '/index.html' : safePath;
-    const filePath = path.resolve(PUBLIC_DIR, '.' + normalizedRelative);
 
-    if (!filePath.startsWith(PUBLIC_DIR)) {
+    // Bloquear acceso a archivos ocultos (dotfiles) o archivos internos prohibidos
+    const segments = normalizedRelative.split(/[/\\]+/).filter(Boolean);
+    const requestedFileName = (segments[segments.length - 1] || '').toLowerCase();
+
+    if (segments.some(seg => seg.startsWith('.')) || FORBIDDEN_FILES.has(requestedFileName)) {
+        res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Acceso denegado');
+        return;
+    }
+
+    const filePath = path.resolve(ROOT_DIR, '.' + normalizedRelative);
+
+    if (!filePath.startsWith(ROOT_DIR)) {
         res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
         res.end('Acceso denegado');
         return;
@@ -89,8 +114,15 @@ function serveStaticFile(reqPath, res, method = 'GET') {
             return;
         }
 
-        // Proteger contra symlinks que apunten fuera de PUBLIC_DIR
-        if (!realFilePath.startsWith(REAL_PUBLIC_DIR)) {
+        // Proteger contra symlinks que apunten fuera de ROOT_DIR
+        if (!realFilePath.startsWith(REAL_ROOT_DIR)) {
+            res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+            res.end('Acceso denegado');
+            return;
+        }
+
+        const realBase = path.basename(realFilePath).toLowerCase();
+        if (FORBIDDEN_FILES.has(realBase) || realBase.startsWith('.')) {
             res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
             res.end('Acceso denegado');
             return;
@@ -104,7 +136,13 @@ function serveStaticFile(reqPath, res, method = 'GET') {
             }
 
             const ext = path.extname(realFilePath).toLowerCase();
-            const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+            const contentType = MIME_TYPES[ext];
+            if (!contentType) {
+                // Solo servir tipos MIME explícitamente permitidos
+                res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+                res.end('Acceso denegado');
+                return;
+            }
 
             res.writeHead(200, { 
                 'Content-Type': contentType,

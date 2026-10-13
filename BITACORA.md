@@ -9,34 +9,47 @@
 ### Raíz del Proyecto
 | Archivo | Ubicación | Responsabilidad principal |
 | :--- | :--- | :--- |
-| `server.js` | `/server.js` | Servidor local seguro en Node.js puro (ESM). Inyecta cabeceras de seguridad estrictas (CSP, X-Frame-Options, HSTS), sirve archivos estáticos desde `/public` con prevención estricta de path traversal (`decodeURIComponent` + `path.resolve`). |
-| `netlify.toml` | `/netlify.toml` | Configuración de despliegue en Netlify: define `publish = "public"` y cabeceras de seguridad HTTP idénticas a producción. |
+| `index.html` | `/index.html` | Estructura semántica principal, metadatos SEO / Open Graph (`https://romeros.xyz/`), Schema.org LocalBusiness, repositorio SVG (`<symbol>`), Bento Grid y mapa de ubicación. Sin elementos o años hardcodeados. |
+| `styles.css` | `/css/styles.css` | Estilos visuales con variables CSS, layout Bento Grid responsivo, animaciones, reglas de accesibilidad (contraste 4.5:1+, áreas táctiles de 44px+) y soporte para `prefers-reduced-motion`. |
+| `main.js` | `/js/main.js` | Orquestador de inicio en cliente; importa e inicializa los módulos al cargar `DOMContentLoaded`. |
+| `images/` | `/images/` | Fotografías de fondo para las tarjetas del catálogo Bento Grid (`.jpeg`), servidas de forma estática y segura. |
+| `robots.txt` | `/robots.txt` | Directivas de indexación y rastreo para Googlebot y buscadores, enlazando al sitemap. |
+| `sitemap.xml` | `/sitemap.xml` | Mapa de sitio XML con URL canónica `https://romeros.xyz/` para Google Search Console. |
+| `og-image.jpg` | `/og-image.jpg` | Imagen oficial de previsualización para redes sociales (1200×630). |
+| `CNAME` | `/CNAME` | Asignación de dominio personalizado `romeros.xyz` para GitHub Pages. |
+| `.nojekyll` | `/.nojekyll` | Indica a GitHub Pages que sirva archivos estáticos planos sin compilación de Jekyll. |
+| `server.js` | `/server.js` | Servidor local seguro en Node.js puro (ESM). Inyecta cabeceras de seguridad estrictas (CSP, X-Frame-Options, HSTS), sirve archivos estáticos desde la raíz bloqueando rigurosamente archivos internos/sensibles (`FORBIDDEN_FILES` y dotfiles). |
+| `netlify.toml` | `/netlify.toml` | Configuración de despliegue en Netlify (`publish = "."`) y cabeceras de seguridad HTTP idénticas a producción. |
 | `package.json` | `/package.json` | Manifiesto de Node.js (`"type": "module"`, script `"start": "node server.js"`). |
 | `.env` / `.env.example` | `/.env` / `/.env.example` | Configuración de entorno del servidor local (`PORT`, `HOST`). `.env` permanece ignorado por git. |
 | `.gitignore` | `/.gitignore` | Bloquea la subida de `.env`, dependencias de desarrollo y respaldos temporales a git. |
 | `BITACORA.md` | `/BITACORA.md` | Registro de componentes, arquitectura e historial de modificaciones. |
 
-### Frontend Estático (`public/`)
-| Archivo | Ubicación | Responsabilidad principal |
-| :--- | :--- | :--- |
-| `index.html` | `/public/index.html` | Estructura semántica principal, metadatos SEO / Open Graph (`https://romeros.xyz/`), Schema.org LocalBusiness, repositorio SVG (`<symbol>`), Bento Grid y mapa de ubicación. Sin elementos o años hardcodeados. |
-| `styles.css` | `/public/css/styles.css` | Estilos visuales con variables CSS, layout Bento Grid responsivo, animaciones, reglas de accesibilidad (contraste 4.5:1+, áreas táctiles de 44px+) y soporte para `prefers-reduced-motion`. |
-| `main.js` | `/public/js/main.js` | Orquestador de inicio en cliente; importa e inicializa los módulos al cargar `DOMContentLoaded`. |
-| `images/` | `/public/images/` | Fotografías de fondo para las tarjetas del catálogo Bento Grid (`.jpeg`), servidas de forma estática y segura. |
-| `robots.txt` | `/public/robots.txt` | Directivas de indexación y rastreo para Googlebot y buscadores, enlazando al sitemap. |
-| `sitemap.xml` | `/public/sitemap.xml` | Mapa de sitio XML con URL canónica `https://romeros.xyz/` para Google Search Console. |
-
-### Módulos JavaScript (`public/js/modules/`)
+### Módulos JavaScript (`js/modules/`)
 | Módulo | Ubicación | Responsabilidad principal |
 | :--- | :--- | :--- |
-| `catalog.js` | `/public/js/modules/catalog.js` | Renderizado del Bento Grid desde arreglo estructurado de productos, búsqueda en tiempo real y filtrado de categorías con atributos accesibles (`aria-pressed`). |
-| `navigation.js` | `/public/js/modules/navigation.js` | Control de menú móvil, marquesina accesible con pausa, scrollspy y comportamiento del header (se oculta al bajar y reaparece al subir o al llegar al fondo para mostrar el botón de WhatsApp). |
-| `schedule.js` | `/public/js/modules/schedule.js` | Verificación en tiempo real del estado Abierto/Cerrado basado exclusivamente en la zona horaria `America/Tijuana` (Lunes a Domingo 7:00 AM - 9:00 PM), con normalización de medianoche (`% 24`). |
-| `analytics.js` | `/public/js/modules/analytics.js` | Controlador de analítica y privacidad sin inyección de scripts externos, manteniendo estricto el CSP. |
+| `catalog.js` | `/js/modules/catalog.js` | Renderizado del Bento Grid desde arreglo estructurado de productos, búsqueda en tiempo real y filtrado de categorías con atributos accesibles (`aria-pressed`). Rutas de imágenes relativas (`images/`). |
+| `navigation.js` | `/js/modules/navigation.js` | Control de menú móvil, marquesina accesible con pausa, scrollspy y comportamiento del header (se oculta al bajar y reaparece al subir o al llegar al fondo para mostrar el botón de WhatsApp). |
+| `schedule.js` | `/js/modules/schedule.js` | Verificación en tiempo real del estado Abierto/Cerrado basado exclusivamente en la zona horaria `America/Tijuana` (Lunes a Domingo 7:00 AM - 9:00 PM), con normalización de medianoche (`% 24`). |
+| `analytics.js` | `/js/modules/analytics.js` | Controlador de analítica y privacidad sin inyección de scripts externos, manteniendo estricto el CSP. |
 
 ---
 
 ## 2. Historial de Modificaciones
+
+### [2026-10-12] - Migración a raíz `/` para GitHub Pages, CNAME y `.nojekyll`
+* **Compatibilidad Nativa con GitHub Pages:**
+  * GitHub Pages requiere que `index.html` resida en la raíz `/` del repositorio (o `/docs`). Se migraron todos los archivos del frontend estático desde `public/` hacia la raíz del repositorio (`index.html`, `css/`, `js/`, `images/`, `robots.txt`, `sitemap.xml`, `og-image.jpg`).
+  * Se eliminó el directorio intermedio `public/`.
+  * Se creó el archivo `CNAME` con el valor `romeros.xyz` para que GitHub Pages preserve automáticamente el dominio personalizado.
+  * Se creó el archivo vacío `.nojekyll` para evitar que GitHub Pages ejecute el compilador de Jekyll y asegurar la entrega directa de módulos ES y assets.
+* **Seguridad en `server.js` y Servidor Local:**
+  * Al servir desde la raíz en desarrollo local, se implementó una lista de exclusión rigurosa (`FORBIDDEN_FILES`: `server.js`, `package.json`, `.env`, `netlify.toml`, `BITACORA.md`, etc.) y bloqueo de dotfiles para impedir cualquier fuga de código o credenciales vía HTTP.
+  * Verificado con pruebas automatizadas (`curl` local): `index.html`, `css/`, `js/`, `images/`, `robots.txt` y `sitemap.xml` devuelven HTTP 200, mientras que `server.js`, `package.json` y `.env` devuelven HTTP 403 Forbidden.
+* **Portabilidad de Assets en `catalog.js`:**
+  * Se actualizaron las rutas de imágenes en `catalog.js` a relativas (`images/${item.image}` en vez de `/images/...`) para garantizar funcionamiento indistinto en dominio raíz (`romeros.xyz`) o subrutas de GitHub Pages.
+* **Actualización en `netlify.toml`:**
+  * Ajustada la directiva de publicación de `publish = "public"` a `publish = "."`.
 
 ### [2026-10-12] - Configuración de dominio oficial romeros.xyz, auditoría SEO e indexación
 * **Dominio Oficial y Metadatos (`romeros.xyz`):**

@@ -142,7 +142,7 @@ function createBentoCard(item) {
     if (item.image) {
         const bgImg = document.createElement('div');
         bgImg.className = 'bento-bg-img';
-        bgImg.style.backgroundImage = `url('/images/${item.image}')`;
+        bgImg.style.backgroundImage = `url('images/${item.image}')`;
         bgImg.setAttribute('aria-hidden', 'true');
         card.appendChild(bgImg);
 
